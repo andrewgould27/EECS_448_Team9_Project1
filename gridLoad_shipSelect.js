@@ -32,8 +32,8 @@ var numHits = 0;
 var canAttack = false;
 var shipOrientation = 0;
 var numShips;  
-var numPieces;
-
+var numPieces=0;
+var leftToPlace;
 
 //main function calls loadgrid and passes the function used by the player for attacking
 //also handles the player's choice for number of ships
@@ -43,20 +43,21 @@ function main(gameType)
     configButtons = document.querySelector('#configButtons');
     numShipsChoice=parseInt(document.querySelector('#chooseNumShips').value);
     numShips=numShipsChoice;
-    numPieces=numShips;
+    leftToPlace=numShips;
     configButtons.remove();
     document.querySelectorAll('.startButton').forEach(
             function(el){el.hidden = false;} );
     if(gameType.id === 'botGame')
     {
         loadGrid(attackBot);
+        document.querySelector('#ready').onclick = botIsReady;
     }
     // else if(gameType.id === 'onlineGame')//for possible game against another player
     // {
     //     loadGrid(attackPlayer);
     // }
     console.log(numShips);
-    console.log(numPieces);
+    console.log(leftToPlace);
 }
 
 function loadGrid(attackFunc)
@@ -95,7 +96,7 @@ function loadGrid(attackFunc)
             shipBtn.addEventListener("mousemove", function(){
                 if(selectionPhase === true)
                 {
-                    if(mouseDown === true && numPieces>0)
+                    if(mouseDown === true && leftToPlace>0)
                     {
                         placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this);
                         
@@ -144,7 +145,7 @@ function resetShipGrid()
     selectionPhase = true;
     shipOrientation = 0;
     numShips=numShipsChoice;
-    numPieces=numShips;
+    leftToPlace=numShips;
     for(var i=0; i<10; i++)
     {
         for(var j=0; j<10; j++)
@@ -156,22 +157,23 @@ function resetShipGrid()
 
 function placeShipPiece(row, col, el)
 {
-    if(canPlace(row, col) && numPieces > 0 )
+    if(canPlace(row, col) && leftToPlace > 0 )
     {
         el.className = 'selectedShip';
         shipArr[row][col] = numShips;
-        numPieces--;
+        leftToPlace--;
+        numPieces++;
     }
-    else if(numPieces == 0 && numShips == 0)
+    else if(leftToPlace == 0 && numShips == 0)
     {
         console.log("selection phase over");
         selectionPhase = false;
         //check if ready for sending board config to server
     }
-    else if(numPieces == 0)
+    else if(leftToPlace == 0)
     {
         numShips--;
-        numPieces = numShips;
+        leftToPlace = numShips;
         shipOrientation = 0;
         console.log("ship selection over");
     }
@@ -184,11 +186,11 @@ function canPlace(row, col)
     {
         return false;
     }
-    else if(numPieces === numShips)
+    else if(leftToPlace === numShips)
     {
         return true;
     }
-    else if(numPieces === (numShips - 1) )
+    else if(leftToPlace === (numShips - 1) )
     {
         if( (row-1>=0 && shipArr[row-1][col] === numShips) || (row+1 <10 &&shipArr[row+1][col] === numShips))
         {
@@ -205,11 +207,11 @@ function canPlace(row, col)
             return false;
         }        
     }
-    else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && shipArr[row-1][col] === numShips) ||  (row+1 <10 &&shipArr[row+1][col] === numShips)))
+    else if(shipOrientation === 1 && leftToPlace>0 && ((row-1>=0 && shipArr[row-1][col] === numShips) ||  (row+1 <10 &&shipArr[row+1][col] === numShips)))
     {
         return true;
     }
-    else if(shipOrientation === 2 && numPieces>0 && ((col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips)) )
+    else if(shipOrientation === 2 && leftToPlace>0 && ((col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips)) )
     {
         return true;
     }
