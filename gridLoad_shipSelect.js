@@ -32,8 +32,9 @@ var numHits = 0;
 var canAttack = false;
 var shipOrientation = 0;
 var numShips;  
-var numPieces=0;
-var leftToPlace;
+var numPieces;
+var hitsToWin = 0;
+
 
 //main function calls loadgrid and passes the function used by the player for attacking
 //also handles the player's choice for number of ships
@@ -42,6 +43,10 @@ function main(gameType)
     shipNumSelect = document.createElement('select');
     configButtons = document.querySelector('#configButtons');
     numShipsChoice=parseInt(document.querySelector('#chooseNumShips').value);
+    for(let i=numShipsChoice; i>0; i--)
+    {
+        hitsToWin += i;
+    }
     numShips=numShipsChoice;
     leftToPlace=numShips;
     configButtons.remove();
@@ -161,8 +166,14 @@ function placeShipPiece(row, col, el)
     {
         el.className = 'selectedShip';
         shipArr[row][col] = numShips;
-        leftToPlace--;
-        numPieces++;
+        numPieces--;
+        if(numPieces == 0)
+        {
+            numShips--;
+            numPieces = numShips;
+            shipOrientation = 0;
+            console.log("ship selection over");
+        }
     }
     else if(leftToPlace == 0 && numShips == 0)
     {
@@ -170,14 +181,6 @@ function placeShipPiece(row, col, el)
         selectionPhase = false;
         //check if ready for sending board config to server
     }
-    else if(leftToPlace == 0)
-    {
-        numShips--;
-        leftToPlace = numShips;
-        shipOrientation = 0;
-        console.log("ship selection over");
-    }
-
 }
 
 function canPlace(row, col)
