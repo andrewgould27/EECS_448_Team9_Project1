@@ -1,0 +1,10 @@
+Work Hours Estimate:
+
+We estimate 8-10 hours per person for:
+
+-reading and learning javascript and html
+-creating documentation for code
+-writing code
+-team meetings
+
+For a total worktime of 40-50 hours.
