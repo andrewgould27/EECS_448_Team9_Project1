@@ -177,19 +177,86 @@ function loadPlayGrid()
     gameBoard.appendChild(attackBoard);
     shipBoard.className = 'grid';
     attackBoard.className = 'grid';
-    for(i=0; i<10; i++)
+    for(let i=0; i<10; i++)
     {
         var row = shipBoard.insertRow(i);
-        for(j=0; j<10; j++)
+        for(let j=0; j<10; j++)
         {
             shipBtn = document.createElement('button');
-            if(arr[i][j] !== 0 )
-            shipBtn.className = 'unselectedShip';
+            if(whosTurn === 1)
+            {
+                switch(p1shipArr[i][j]){
+                    case 1:
+                        el.className = 'ship_1';
+                        break;
+                    case 2:
+                        el.className = 'ship_2';
+                        break;
+                    case 3:
+                        el.className = 'ship_3';
+                        break;
+                    case 4:
+                        el.className = 'ship_4';
+                        break;
+                    case 5:
+                        el.className = 'ship_5';
+                        break;        
+                    case 6:
+                        el.className = 'ship_6';
+                        break;
+                    case -1:
+                        el.className = 'attackedShip';
+                        break;
+                    case 0:
+                        el.className = 'unselectedShip';
+                        break;
+                }
+            }
+            else
+            {
+                switch(p1shipArr[i][j]){
+                    case 1:
+                        el.className = 'ship_1';
+                        break;
+                    case 2:
+                        el.className = 'ship_2';
+                        break;
+                    case 3:
+                        el.className = 'ship_3';
+                        break;
+                    case 4:
+                        el.className = 'ship_4';
+                        break;
+                    case 5:
+                        el.className = 'ship_5';
+                        break;        
+                    case 6:
+                        el.className = 'ship_6';
+                        break;
+                    case -1:
+                        el.className = 'attackedShip';
+                        break;
+                    case 0:
+                        el.className = 'unselectedShip';
+                        break;
+                }
+            }
             var cell = row.insertCell(j);
             cell.appendChild(shipBtn);
 
         }
-        for
+        row = attackBoard.insertRow();
+        for(let k=0; k<10; k++)
+        {
+            var atkBtn = document.createElement('button');
+            atkBtn.className = 'attackChoice';
+            atkBtn.addEventListener("click", function(){
+                
+            });
+
+            cell = row.insertCell(j);
+            cell.appendChild(atkBtn);
+        }
         
     }
 }
@@ -233,6 +300,7 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
+			console.log(playerShipArray);
                         p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     else
@@ -282,6 +350,26 @@ function p1PlaceShipPiece(row, col, el, arr)
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
     {
         el.className = 'selectedShip';
+        switch(p1NumShips%7){//modified to use css styling
+            case 1:
+                el.className = 'ship_1';
+                break;
+            case 2:
+                el.className = 'ship_2';
+                break;
+            case 3:
+                el.className = 'ship_3';
+                break;
+            case 4:
+                el.className = 'ship_4';
+                break;
+            case 5:
+                el.className = 'ship_5';
+                break;        
+            case 6:
+                el.className = 'ship_6';
+                break;
+        }
         arr[row][col] = p1NumShips;
         p1NumPieces--;
         if(p1NumPieces === 0)
@@ -303,6 +391,26 @@ function p2PlaceShipPiece(row, col, el, arr)
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
     {
         el.className = 'selectedShip';
+        switch(p2NumShips%7){//modified to use css styling
+            case 1:
+                el.className = 'ship_1';
+                break;
+            case 2:
+                el.className = 'ship_2';
+                break;
+            case 3:
+                el.className = 'ship_3';
+                break;
+            case 4:
+                el.className = 'ship_4';
+                break;
+            case 5:
+                el.className = 'ship_5';
+                break;        
+            case 6:
+                el.className = 'ship_6';
+                break;
+        }
         arr[row][col] = p2NumShips;
         p2NumPieces--;
         if(p2NumPieces === 0)
@@ -357,5 +465,44 @@ function canPlace(row, col, arr, numPieces, numShips)
     else
     {
         return false;
+    }
+}
+function resetShipGrid()
+{
+    console.log('reset button selected');
+    document.querySelectorAll('.ship_6, .ship_5, .ship_4, .ship_3, .ship_2, .ship_1').forEach(function(el){
+        el.className = 'unselectedShip';
+    });
+    canSelect = true;
+    shipOrientation = 0;
+    if(whosTurn === 1)
+    {
+        p1NumShips=numShipsChoice;
+        p1NumPieces=p1NumShips;
+    }
+    if(whosTurn === 2)
+    {
+        p2NumShips=numShipsChoice;
+        p2NumPieces=p2NumShips;
+    }
+    
+
+    for(let i=0; i<10; i++)
+    {
+        if(whosTurn === 1)
+        {
+            for(let j=0; j<10; j++)
+            {
+                p1shipArr[i][j]=0;
+            }
+        }
+        else
+        {
+            for(let j=0; j<10; j++)
+            {
+                p2shipArr[i][j]=0;
+            }
+        }
+        
     }
 }
