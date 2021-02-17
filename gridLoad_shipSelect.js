@@ -1,7 +1,7 @@
 
 //features to add: ???local two-player games???
 var numShipsChoice;
-var selectionPhase = true;
+var canSelect = true;
 var numHits = 0;
 var canAttack = false;
 var shipOrientation = 0;
@@ -33,6 +33,7 @@ function main(gameType)
     }
     else if(gameType.id === 'local')
     {
+        whosTurn = 1;
         loadSelectionGrid(p1shipArr);
         document.querySelector('#ready').onclick = localIsReady;
     }
@@ -44,7 +45,7 @@ function main(gameType)
     console.log(numPieces);
 }
 
-function loadGrid(attackFunc, playerShipArray, playerAttackArray)
+function loadGrid(attackFunc)
 {
     var gameBoard = document.querySelector('#board');
     var shipBoard = document.createElement('table');
@@ -70,26 +71,26 @@ function loadGrid(attackFunc, playerShipArray, playerAttackArray)
             shipBtn.className = 'unselectedShip';
             shipBtn.addEventListener("mousedown", function(){
                 
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
                     //console.log("d");
-                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     mouseDown = true;
                 }
             });
             shipBtn.addEventListener("mousemove", function(){
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
                     if(mouseDown === true && numPieces>0)
                     {
-                        placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                        placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     }
                 }
             });
             shipBtn.addEventListener("mouseup", function(){
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
-                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     
                     mouseDown = false;
                 }
@@ -105,7 +106,7 @@ function loadGrid(attackFunc, playerShipArray, playerAttackArray)
             var atkBtn = document.createElement('button');
             atkBtn.className = 'attackChoice';
             atkBtn.addEventListener("click", function(){
-                if(playerAttackArray[this.parentNode.parentNode.rowIndex][this.parentNode.cellIndex] === 0 && canAttack)
+                if(attackArr[this.parentNode.parentNode.rowIndex][this.parentNode.cellIndex] === 0 && canAttack)
                 {
                     this.className = 'pendingAttack';
                     canAttack = false;
@@ -125,7 +126,7 @@ function resetShipGrid()
     document.querySelectorAll('.selectedShip').forEach(function(el){
         el.className = 'unselectedShip';
     });
-    selectionPhase = true;
+    canSelect = true;
     shipOrientation = 0;
     numShips=numShipsChoice;
     numPieces=numShips;
@@ -140,7 +141,7 @@ function resetShipGrid()
 
 function placeShipPiece(row, col, el, arr)
 {
-    if(canPlace(row, col) && numPieces > 0 )
+    if(canPlace(row, col, arr) && numPieces > 0 )
     {
         el.className = 'selectedShip';
         arr[row][col] = numShips;
@@ -156,13 +157,13 @@ function placeShipPiece(row, col, el, arr)
     else if(numPieces == 0 && numShips == 0)
     {
         console.log("selection phase over");
-        selectionPhase = false;
+        canSelect = false;
     }
 }
 
-function canPlace(row, col)
+function canPlace(row, col, arr)
 {
-    if(shipArr[row][col] !== 0)
+    if(arr[row][col] !== 0)
     {
         return false;
     }
@@ -172,12 +173,12 @@ function canPlace(row, col)
     }
     else if(numPieces === (numShips - 1) )
     {
-        if( (row-1>=0 && shipArr[row-1][col] === numShips) || (row+1 <10 &&shipArr[row+1][col] === numShips))
+        if( (row-1>=0 && arr[row-1][col] === numShips) || (row+1 <10 &&arr[row+1][col] === numShips))
         {
             shipOrientation = 1;
             return true;
         }
-        else if ( (col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips) )
+        else if ( (col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips) )
         {
             shipOrientation = 2;
             return true;
@@ -187,11 +188,11 @@ function canPlace(row, col)
             return false;
         }        
     }
-    else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && shipArr[row-1][col] === numShips) ||  (row+1 <10 &&shipArr[row+1][col] === numShips)))
+    else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && arr[row-1][col] === numShips) ||  (row+1 <10 &&arr[row+1][col] === numShips)))
     {
         return true;
     }
-    else if(shipOrientation === 2 && numPieces>0 && ((col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips)) )
+    else if(shipOrientation === 2 && numPieces>0 && ((col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips)) )
     {
         return true;
     }
