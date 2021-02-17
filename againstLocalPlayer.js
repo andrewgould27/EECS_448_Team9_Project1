@@ -47,7 +47,10 @@ var p2shipArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
+let numShipsChoice;
+let hitsToWin = 0;
 let whosTurn = 1;
+let canSelect = true;
 
 let p1NumHits = 0;
 let p1NumShips = numShipsChoice;
@@ -57,6 +60,29 @@ let p2NumHits = 0;
 let p2NumShips = numShipsChoice;
 let p2NumPieces;
 
+onLoad();
+
+function onLoad() //called as soon as script is loaded
+{
+    configButtons = document.querySelector('#configButtons');
+    
+    numShipsChoice=parseInt(document.querySelector('#chooseNumShips').value);
+    configButtons.remove();
+    for(let i=numShipsChoice; i>0; i--)
+    {
+        hitsToWin += i;
+    }
+
+    document.querySelectorAll('.startButton').forEach(
+        function(el){el.hidden = false;} );
+
+    p1NumShips = numShipsChoice;
+    p1NumPieces = p1NumShips;
+    p2NumShips = numShipsChoice;
+    p2NumPieces = p2NumShips;
+    loadSelectionGrid(p1shipArr);
+    document.querySelector('#ready').onclick = localIsReady;
+}
 function localIsReady()
 {
     let boardDiv = document.querySelector('#board');
@@ -137,8 +163,8 @@ function loadSelectionGrid(playerShipArray)
 
     var gameBoard = document.querySelector('#board');
     var shipBoard = document.createElement('table');
+
     var mouseDown = false;
-    
     document.addEventListener("mouseup", function(){
         mouseDown = false;
     });
@@ -170,13 +196,13 @@ function loadSelectionGrid(playerShipArray)
             shipBtn.addEventListener("mousemove", function(){
                 if(canSelect === true)
                 {
-                    if(mouseDown === true && numPieces>0)
+                    if(mouseDown === true )
                     {
                         if(whosTurn === 1)
                         {
                             p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                         }
-                        else
+                        else if(whosTurn === 2)
                         {
                             p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                         }
@@ -204,7 +230,7 @@ function loadSelectionGrid(playerShipArray)
 }
 function p1PlaceShipPiece(row, col, el, arr)
 {
-    if(canPlace(row, col, arr) && p1NumPieces > 0 )
+    if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
     {
         el.className = 'selectedShip';
         arr[row][col] = p1NumShips;
@@ -225,7 +251,7 @@ function p1PlaceShipPiece(row, col, el, arr)
 }
 function p2PlaceShipPiece(row, col, el, arr)
 {
-    if(canPlace(row, col, arr) && p2NumPieces > 0 )
+    if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
     {
         el.className = 'selectedShip';
         arr[row][col] = p2NumShips;
@@ -242,5 +268,45 @@ function p2PlaceShipPiece(row, col, el, arr)
     {
         console.log("selection phase over");
         canSelect = false;
+    }
+}
+function canPlace(row, col, arr, numPieces, numShips)
+{
+    if(arr[row][col] !== 0)
+    {
+        return false;
+    }
+    else if(numPieces === numShips)
+    {
+        return true;
+    }
+    else if(numPieces === (numShips - 1) )
+    {
+        if( (row-1>=0 && arr[row-1][col] === numShips) || (row+1 <10 &&arr[row+1][col] === numShips))
+        {
+            shipOrientation = 1;
+            return true;
+        }
+        else if ( (col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips) )
+        {
+            shipOrientation = 2;
+            return true;
+        }
+        else
+        {
+            return false;
+        }        
+    }
+    else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && arr[row-1][col] === numShips) ||  (row+1 <10 &&arr[row+1][col] === numShips)))
+    {
+        return true;
+    }
+    else if(shipOrientation === 2 && numPieces>0 && ((col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips)) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }

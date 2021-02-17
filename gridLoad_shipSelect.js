@@ -26,7 +26,7 @@ function main(gameType)
             function(el){el.hidden = false;} );
     if(gameType.id === 'botGame')
     {
-        loadGrid(attackBot, shipArr, attackArr);
+        loadGrid(attackBot);
         document.querySelector('#ready').onclick = botIsReady;
     }
     else if(gameType.id === 'local')
