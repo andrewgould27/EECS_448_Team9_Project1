@@ -82,6 +82,7 @@ function attackBot(row, col, el)
     else
     {
         el.className = 'missedAttack';
+        attackArr[row][col] = -1;
         botTurn();
     }
 }
