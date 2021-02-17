@@ -100,6 +100,7 @@ function localIsReady()
         loadSelectionGrid(p2shipArr);//loads ship selection screen
         document.querySelector('#ready').disabled = false;
         document.querySelector('#reset').disabled = false;
+        canSelect = true;
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 
     {
@@ -112,6 +113,7 @@ function localIsReady()
         alert('P1\'s turn for attack phase');
         document.querySelector('#ready').remove();
         document.querySelector('#reset').remove();
+
     }
     else
     {
@@ -150,14 +152,22 @@ function loadSelectionGrid(playerShipArray)
 {
     let canvas = document.querySelector('#notifications').querySelector('canvas');
     let notifications= canvas.getContext('2d');
-    notifications.font = '30px Arial';
+    
     if(whosTurn === 1)
     {
+        notifications.fillStyle = '#c2b280';
+        notifications.fillRect(0,0,100,500);
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'green';
         notifications.fillText('Choose Your Ship Positions Player1', 0, 50);
     }
     else
     {
-        notifications.clearRect(0,0, 100, 500);
+        notifications.clearRect(0,0,500,100);
+        notifications.fillStyle = 'red';
+        notifications.fillRect(0,0,500,100);
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'green';
         notifications.fillText('Choose Your Ship Positions Player2', 0, 50);
     }
 
