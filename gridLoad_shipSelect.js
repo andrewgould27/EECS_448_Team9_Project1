@@ -1,3 +1,6 @@
+//this file should now be deprecated
+//using for copy pasting functions to other files
+
 var numShipsChoice;
 var canSelect = true;
 var numHits = 0;
