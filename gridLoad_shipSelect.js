@@ -36,6 +36,7 @@ function main(gameType)
         p1NumPieces = p1NumShips;
         p2NumShips = numShipsChoice;
         p2NumPieces = p2NumShips;
+        
         loadSelectionGrid(p1shipArr);
         document.querySelector('#ready').onclick = localIsReady;
     }
