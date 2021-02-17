@@ -132,6 +132,8 @@ function localIsReady()//if player 1 is ready for attack phase
 function attackLocal(row, col, attackArr, el)
 {
     //test
+    let boardDiv = document.querySelector('#board');
+
     if(whosTurn === 1)
     {
         if(p2shipArr[row][col] !== 0 )
@@ -148,6 +150,7 @@ function attackLocal(row, col, attackArr, el)
             }
             else
             {
+                whosTurn = 2;
                 alert('Switch to P2');
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
@@ -159,18 +162,69 @@ function attackLocal(row, col, attackArr, el)
                 }
                 loadPlayGrid(p2shipArr, p2attackArr);
             }
-            whosTurn = 2;
         }
         else
         {
             attackArr[row][col] = -1;
+            el.className = 'missedAttack';
             whosTurn = 2;
+            alert('Switch to P2');
+            notifications.clearRect(0,0,500,100);
+            notifications.font = '30px Arial';
+            notifications.fillStyle = 'Blue';
+            notifications.fillText('P2\'s turn to attack', 0, 50);
+            while(boardDiv.firstChild)
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
             loadPlayGrid(p2shipArr, p2attackArr);
         }
     }
     else
     {
-        
+        if(p1shipArr[row][col] !== 0 )
+        {
+            p2NumHits++;
+            attackArr[row][col] = 1;
+            el.className = 'successfulAttack';
+            if(p2NumHits === hitsToWin)
+            {
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('P2 YOU WIN!', 0, 50);
+            }
+            else
+            {
+                whosTurn = 1;
+                alert('Switch to P1');
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Red';
+                notifications.fillText('P1\'s turn to attack', 0, 50);
+                while(boardDiv.firstChild)
+                {
+                    boardDiv.removeChild(boardDiv.lastChild);
+                }
+                loadPlayGrid(p1shipArr, p1attackArr);
+            }
+        }
+        else
+        {
+            attackArr[row][col] = -1;
+            el.className = 'missedAttack';
+            whosTurn = 1;
+            alert('Switch to P1');
+            notifications.clearRect(0,0,500,100);
+            notifications.font = '30px Arial';
+            notifications.fillStyle = 'Red';
+            notifications.fillText('P1\'s turn to attack', 0, 50);
+            while(boardDiv.firstChild)
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
+            loadPlayGrid(p1shipArr, p1attackArr);
+        }
     }
 }
 
