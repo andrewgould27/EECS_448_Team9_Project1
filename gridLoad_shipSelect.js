@@ -1,5 +1,3 @@
-
-//features to add: ???local two-player games???
 var numShipsChoice;
 var canSelect = true;
 var numHits = 0;
@@ -34,6 +32,10 @@ function main(gameType)
     else if(gameType.id === 'local')
     {
         whosTurn = 1;
+        p1NumShips = numShipsChoice;
+        p1NumPieces = p1NumShips;
+        p2NumShips = numShipsChoice;
+        p2NumPieces = p2NumShips;
         loadSelectionGrid(p1shipArr);
         document.querySelector('#ready').onclick = localIsReady;
     }

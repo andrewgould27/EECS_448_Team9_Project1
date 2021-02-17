@@ -72,6 +72,8 @@ function localIsReady()
         whosTurn = 2;
         alert('P2\'s turn for ship selection');//pauses to allow player switching
         loadSelectionGrid(p2shipArr);//loads ship selection screen
+        document.querySelector('#ready').disabled = false;
+        document.querySelector('#reset').disabled = false;
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 
     {
@@ -82,6 +84,8 @@ function localIsReady()
         }
         whosTurn = 1;
         alert('P1\'s turn for attack phase');
+        document.querySelector('#ready').remove();
+        document.querySelector('#reset').remove();
     }
     else
     {
