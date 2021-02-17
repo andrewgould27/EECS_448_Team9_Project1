@@ -86,7 +86,7 @@ function onLoad() //called as soon as script is loaded
     loadSelectionGrid(p1shipArr);
     document.querySelector('#ready').onclick = localIsReady;
 }
-function localIsReady()
+function localIsReady()//if player 1 is ready for attack phase
 {
     let boardDiv = document.querySelector('#board');
     if(p1NumShips === 0 && whosTurn === 1)
@@ -106,7 +106,7 @@ function localIsReady()
         document.querySelector('#reset').disabled = false;
         canSelect = true;
     }
-    else if(p2NumShips === 0 && whosTurn === 2)//if player 
+    else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
         while(boardDiv.firstChild)
@@ -114,18 +114,22 @@ function localIsReady()
             boardDiv.removeChild(boardDiv.lastChild);
         }
         whosTurn = 1;
-        alert('P1\'s turn for attack phase');
-
+        alert('Switch to P1');
         document.querySelector('#ready').remove();
         document.querySelector('#reset').remove();
-
+        canSelect = true;
+        notifications.clearRect(0,0,500,100);
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'Red';
+        notifications.fillText('P1\'s turn to attack', 0, 50);
+        loadPlayGrid(p1shipArr, p1attackArr);
     }
     else
     {
         console.log('Not Ready');
     }
 }
-function attackLocal(row, col, el)
+function attackLocal(row, col, attackArr, el)
 {
     //test
     if(whosTurn === 1)
@@ -137,23 +141,40 @@ function attackLocal(row, col, el)
             el.className = 'successfulAttack';
             if(p1NumHits === hitsToWin)
             {
-                //let winNotification = document.createElement();
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Red';
+                notifications.fillText('P1 YOU WIN!', 0, 50);
             }
             else
             {
-                alert('P2\'s turn to attack');
-                loadGrid(attackLocal, p2shipArr,  p2attackArr);
+                alert('Switch to P2');
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('P2\'s turn to attack', 0, 50);
+                while(boardDiv.firstChild)
+                {
+                    boardDiv.removeChild(boardDiv.lastChild);
+                }
+                loadPlayGrid(p2shipArr, p2attackArr);
             }
+            whosTurn = 2;
+        }
+        else
+        {
+            attackArr[row][col] = -1;
+            whosTurn = 2;
+            loadPlayGrid(p2shipArr, p2attackArr);
         }
     }
     else
     {
-        el.className = 'missedAttack';
-        loadGrid();
+        
     }
 }
 
-function loadPlayGrid()
+function loadPlayGrid(shipArr, attackArr)
 {
     if(whosTurn === 1)
     {
@@ -179,82 +200,71 @@ function loadPlayGrid()
     attackBoard.className = 'grid';
     for(let i=0; i<10; i++)
     {
-        var row = shipBoard.insertRow(i);
+        let row = shipBoard.insertRow(i);
+        let cell;
         for(let j=0; j<10; j++)
         {
             shipBtn = document.createElement('button');
-            if(whosTurn === 1)
-            {
-                switch(p1shipArr[i][j]){
-                    case 1:
-                        el.className = 'ship_1';
-                        break;
-                    case 2:
-                        el.className = 'ship_2';
-                        break;
-                    case 3:
-                        el.className = 'ship_3';
-                        break;
-                    case 4:
-                        el.className = 'ship_4';
-                        break;
-                    case 5:
-                        el.className = 'ship_5';
-                        break;        
-                    case 6:
-                        el.className = 'ship_6';
-                        break;
-                    case -1:
-                        el.className = 'attackedShip';
-                        break;
-                    case 0:
-                        el.className = 'unselectedShip';
-                        break;
-                }
+            switch(shipArr[i][j]){
+                case 1:
+                    shipBtn.className = 'ship_1';
+                    break;
+                case 2:
+                    shipBtn.className = 'ship_2';
+                    break;
+                case 3:
+                    shipBtn.className = 'ship_3';
+                    break;
+                case 4:
+                    shipBtn.className = 'ship_4';
+                    break;
+                case 5:
+                    shipBtn.className = 'ship_5';
+                    break;        
+                case 6:
+                    shipBtn.className = 'ship_6';
+                    break;
+                case -1:
+                    shipBtn.className = 'attackedShip';
+                    break;
+                case 0:
+                    shipBtn.className = 'unselectedShip';
+                    break;
             }
-            else
-            {
-                switch(p1shipArr[i][j]){
-                    case 1:
-                        el.className = 'ship_1';
-                        break;
-                    case 2:
-                        el.className = 'ship_2';
-                        break;
-                    case 3:
-                        el.className = 'ship_3';
-                        break;
-                    case 4:
-                        el.className = 'ship_4';
-                        break;
-                    case 5:
-                        el.className = 'ship_5';
-                        break;        
-                    case 6:
-                        el.className = 'ship_6';
-                        break;
-                    case -1:
-                        el.className = 'attackedShip';
-                        break;
-                    case 0:
-                        el.className = 'unselectedShip';
-                        break;
-                }
-            }
-            var cell = row.insertCell(j);
+            cell = row.insertCell(j);
             cell.appendChild(shipBtn);
-
         }
-        row = attackBoard.insertRow();
+        
+
+        
+        row = attackBoard.insertRow(i);
         for(let k=0; k<10; k++)
         {
             var atkBtn = document.createElement('button');
+            switch(attackArr[i][k]){
+                case 1:
+                    atkBtn.className = 'successfulAttack';
+                    break;
+                case 0:
+                    atkBtn.className = 'attackChoice';
+                    break;
+                case -1:
+                    atkBtn.className = 'missedAttack';
+                    break;
+            }
             atkBtn.className = 'attackChoice';
             atkBtn.addEventListener("click", function(){
-                
+                let row = this.parentNode.parentNode.rowIndex;
+                let col = this.parentNode.cellIndex;
+                if(attackArr[row][col] === 0 && canSelect === true)
+                {
+                    canSelect = false;
+                    attackLocal(row, col, attackArr, this);
+
+                }
             });
 
-            cell = row.insertCell(j);
+            cell = row.insertCell(k);
             cell.appendChild(atkBtn);
         }
         
