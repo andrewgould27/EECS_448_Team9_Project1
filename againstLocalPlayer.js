@@ -100,7 +100,7 @@ function localIsReady()//if player 1 is ready for attack phase
         }
 
         whosTurn = 2;
-        alert('P2\'s turn for ship selection');//pauses to allow player switching
+        setTimeout(3000, () => {alert('Switch to P2')});//pauses to allow player switching
         loadSelectionGrid(p2shipArr);//loads ship selection screen
         document.querySelector('#ready').disabled = false;
         document.querySelector('#reset').disabled = false;
@@ -114,7 +114,7 @@ function localIsReady()//if player 1 is ready for attack phase
             boardDiv.removeChild(boardDiv.lastChild);
         }
         whosTurn = 1;
-        alert('Switch to P1');
+        setTimeout(3000, () => {alert('Switch to P1')});
         document.querySelector('#ready').remove();
         document.querySelector('#reset').remove();
         canSelect = true;
@@ -151,7 +151,7 @@ function attackLocal(row, col, attackArr, el)
             else
             {
                 whosTurn = 2;
-                alert('Switch to P2');
+                window.setTimeout(3000, () => {alert('Switch to P2');});
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
@@ -161,6 +161,7 @@ function attackLocal(row, col, attackArr, el)
                     boardDiv.removeChild(boardDiv.lastChild);
                 }
                 loadPlayGrid(p2shipArr, p2attackArr);
+                canSelect = true;
             }
         }
         else
@@ -168,7 +169,7 @@ function attackLocal(row, col, attackArr, el)
             attackArr[row][col] = -1;
             el.className = 'missedAttack';
             whosTurn = 2;
-            alert('Switch to P2');
+            window.setTimeout(3000, () => {alert('Switch to P2')});
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
             notifications.fillStyle = 'Blue';
@@ -178,6 +179,7 @@ function attackLocal(row, col, attackArr, el)
                 boardDiv.removeChild(boardDiv.lastChild);
             }
             loadPlayGrid(p2shipArr, p2attackArr);
+            canSelect = true;
         }
     }
     else
@@ -197,7 +199,7 @@ function attackLocal(row, col, attackArr, el)
             else
             {
                 whosTurn = 1;
-                alert('Switch to P1');
+                window.setTimeout(3000, () => {alert('Switch to P1')});
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
@@ -207,6 +209,7 @@ function attackLocal(row, col, attackArr, el)
                     boardDiv.removeChild(boardDiv.lastChild);
                 }
                 loadPlayGrid(p1shipArr, p1attackArr);
+                canSelect = true;
             }
         }
         else
@@ -214,7 +217,7 @@ function attackLocal(row, col, attackArr, el)
             attackArr[row][col] = -1;
             el.className = 'missedAttack';
             whosTurn = 1;
-            alert('Switch to P1');
+            window.setTimeout(3000, () => {alert('Switch to P1')});
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
             notifications.fillStyle = 'Red';
@@ -224,6 +227,7 @@ function attackLocal(row, col, attackArr, el)
                 boardDiv.removeChild(boardDiv.lastChild);
             }
             loadPlayGrid(p1shipArr, p1attackArr);
+            canSelect = true;
         }
     }
 }
@@ -306,7 +310,6 @@ function loadPlayGrid(shipArr, attackArr)
                     atkBtn.className = 'missedAttack';
                     break;
             }
-            atkBtn.className = 'attackChoice';
             atkBtn.addEventListener("click", function(){
                 let row = this.parentNode.parentNode.rowIndex;
                 let col = this.parentNode.cellIndex;
