@@ -152,7 +152,9 @@ function loadSelectionGrid(playerShipArray)
 {
     let canvas = document.querySelector('#notifications').querySelector('canvas');
     let notifications= canvas.getContext('2d');
-    
+
+    alert("Place ships in order from largest to smallest");
+
     if(whosTurn === 1)
     {
         notifications.fillStyle = '#c2b280';
@@ -194,6 +196,7 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
+			console.log(playerShipArray);
                         p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     else
@@ -243,7 +246,24 @@ function p1PlaceShipPiece(row, col, el, arr)
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
     {
         el.className = 'selectedShip';
+	let color1 = "red";
+	switch(p1NumShips%4){
+		case 0:
+		color1 = "CadetBlue";
+		break;
+		case 1:
+		color1 = "Cyan";
+		break;
+		case 2:
+		color1 = "DarkSeaGreen";
+		break;
+		case 3:
+		color1 = "LightGreen";
+		break;
+	}
+	el.style.backgroundColor = color1;
         arr[row][col] = p1NumShips;
+	
         p1NumPieces--;
         if(p1NumPieces === 0)
         {

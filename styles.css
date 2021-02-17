@@ -41,7 +41,7 @@ canvas{
     border-radius: 10px;
     border: 4px double #000000;
     padding: 20px;
-    background-color: green;
+    //background-color: green;
 }
 
 .attackedShip{
