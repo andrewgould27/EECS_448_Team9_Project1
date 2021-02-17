@@ -160,16 +160,14 @@ function loadSelectionGrid(playerShipArray)
         notifications.fillStyle = '#c2b280';
         notifications.fillRect(0,0,100,500);
         notifications.font = '30px Arial';
-        notifications.fillStyle = 'green';
+        notifications.fillStyle = 'Red';
         notifications.fillText('Choose Your Ship Positions Player1', 0, 50);
     }
     else
     {
         notifications.clearRect(0,0,500,100);
-        notifications.fillStyle = 'red';
-        notifications.fillRect(0,0,500,100);
         notifications.font = '30px Arial';
-        notifications.fillStyle = 'green';
+        notifications.fillStyle = 'Blue';
         notifications.fillText('Choose Your Ship Positions Player2', 0, 50);
     }
 
