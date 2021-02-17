@@ -285,6 +285,24 @@ function p2PlaceShipPiece(row, col, el, arr)
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
     {
         el.className = 'selectedShip';
+
+	let color1 = "red";	//A different color is assigned to each ship placed, based on number of ships left
+	switch(p1NumShips%4){
+		case 0:
+		color1 = "CadetBlue";
+		break;
+		case 1:
+		color1 = "Cyan";
+		break;
+		case 2:
+		color1 = "DarkSeaGreen";
+		break;
+		case 3:
+		color1 = "LightGreen";
+		break;
+	}
+	el.style.backgroundColor = color1;
+
         arr[row][col] = p2NumShips;
         p2NumPieces--;
         if(p2NumPieces === 0)
