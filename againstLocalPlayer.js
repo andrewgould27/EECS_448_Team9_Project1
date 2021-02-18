@@ -105,14 +105,12 @@ function localIsReady()//if player 1 is ready for attack phase
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        
-        while(boardDiv.firstChild)//deletes p1's board from screen
-        {
-            boardDiv.removeChild(boardDiv.lastChild);
-        }
-
         whosTurn = 2;
         setTimeout(() => {
+            while(boardDiv.firstChild)//deletes p1's board from screen
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
             loadSelectionGrid(p2shipArr);//loads ship selection screen
             document.querySelector('#ready').disabled = false;
             document.querySelector('#reset').disabled = false;
@@ -123,20 +121,19 @@ function localIsReady()//if player 1 is ready for attack phase
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
-        while(boardDiv.firstChild)
-        {
-            boardDiv.removeChild(boardDiv.lastChild);
-        }
+        document.querySelector('#ready').disabled = true;
+        document.querySelector('#reset').disabled = true;
         whosTurn = 1;
-        setTimeout(3000, () => {alert('Switch to P1')});
-        document.querySelector('#ready').remove();
-        document.querySelector('#reset').remove();
-        canSelect = true;
-        notifications.clearRect(0,0,500,100);
-        notifications.font = '30px Arial';
-        notifications.fillStyle = 'Red';
-        notifications.fillText('P1\'s turn to attack', 0, 50);
-        loadPlayGrid(p1shipArr, p1attackArr);
+        setTimeout(() => {
+            while(boardDiv.firstChild)
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
+            document.querySelector('#ready').remove();
+            document.querySelector('#reset').remove();
+            canSelect = true;
+            loadPlayGrid(p1shipArr, p1attackArr);
+        }, 3000);
     }
     else
     {
@@ -176,41 +173,36 @@ function attackLocal(row, col, attackArr, button)
             }
             else
             {
-                window.setTimeout(() => {
-                    whosTurn = 2;
-                    notifications.clearRect(0,0,500,100);
-                    notifications.font = '30px Arial';
-                    notifications.fillStyle = 'Blue';
-                    notifications.fillText('P2\'s turn to attack', 0, 50);
-                    while(boardDiv.firstChild)
-                    {
-                        boardDiv.removeChild(boardDiv.lastChild);
-                    }
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Red';
+                notifications.fillText('Hit!', 0, 50);
+                window.setTimeout(()=>{
                     loadPlayGrid(p2shipArr, p2attackArr);
-                    canSelect = true;}, 3000 );
-                    notifications.clearRect(0,0,500,100);
-                    notifications.font = '30px Arial';
-                    notifications.fillStyle = 'Red';
-                    notifications.fillText('Hit!', 0, 50);
+                    canSelect = true;
+                }, 3100);
             }
         }
         else
         {
             attackArr[row][col] = -1;
             button.className = 'missedAttack';
-            whosTurn = 2;
-            window.setTimeout(3000, () => {alert('Switch to P2')});
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
-            notifications.fillStyle = 'Blue';
-            notifications.fillText('P2\'s turn to attack', 0, 50);
+            notifications.fillStyle = 'Red';
+            notifications.fillText('Miss', 0, 50);
+            window.setTimeout(()=>{
+                loadPlayGrid(p2shipArr, p2attackArr);
+                canSelect = true;
+            }, 3100);
+        }
+        window.setTimeout(() => {
+            whosTurn = 2;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            loadPlayGrid(p2shipArr, p2attackArr);
-            canSelect = true;
-        }
+        }, 3000 );
     }
     else
     {
@@ -229,37 +221,36 @@ function attackLocal(row, col, attackArr, button)
             }
             else
             {
-                whosTurn = 1;
-                window.setTimeout(3000, () => {alert('Switch to P1')});
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
-                notifications.fillStyle = 'Red';
-                notifications.fillText('P1\'s turn to attack', 0, 50);
-                while(boardDiv.firstChild)
-                {
-                    boardDiv.removeChild(boardDiv.lastChild);
-                }
-                loadPlayGrid(p1shipArr, p1attackArr);
-                canSelect = true;
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Hit!', 0, 50);
+                window.setTimeout(()=>{
+                    loadPlayGrid(p1shipArr, p1attackArr);
+                    canSelect = true;
+                }, 3100);
             }
         }
         else
         {
             attackArr[row][col] = -1;
             button.className = 'missedAttack';
-            whosTurn = 1;
-            window.setTimeout(3000, () => {alert('Switch to P1')});
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
-            notifications.fillStyle = 'Red';
-            notifications.fillText('P1\'s turn to attack', 0, 50);
+            notifications.fillStyle = 'Blue';
+            notifications.fillText('Miss', 0, 50);
+            window.setTimeout(()=>{
+                loadPlayGrid(p1shipArr, p1attackArr);
+                canSelect = true;
+            }, 3100);
+        }
+        window.setTimeout(() => {
+            whosTurn = 1;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            loadPlayGrid(p1shipArr, p1attackArr);
-            canSelect = true;
-        }
+        }, 3000 );
     }
 }
 
