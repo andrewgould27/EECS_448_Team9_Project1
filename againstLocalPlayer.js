@@ -100,11 +100,13 @@ function localIsReady()//if player 1 is ready for attack phase
         }
 
         whosTurn = 2;
-        setTimeout(3000, () => {alert('Switch to P2')});//pauses to allow player switching
-        loadSelectionGrid(p2shipArr);//loads ship selection screen
-        document.querySelector('#ready').disabled = false;
-        document.querySelector('#reset').disabled = false;
-        canSelect = true;
+        setTimeout(() => {
+            loadSelectionGrid(p2shipArr);//loads ship selection screen
+            document.querySelector('#ready').disabled = false;
+            document.querySelector('#reset').disabled = false;
+            canSelect = true;
+        }, 3000);//pauses to allow player switching
+        
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
