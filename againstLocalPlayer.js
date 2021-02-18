@@ -60,6 +60,9 @@ let p2NumHits = 0;
 let p2NumShips = numShipsChoice;
 let p2NumPieces;
 
+let canvas = document.querySelector('#notifications').querySelector('canvas');
+let notifications= canvas.getContext('2d');
+
 onLoad();
 
 function onLoad() //called as soon as script is loaded
@@ -90,11 +93,12 @@ function localIsReady()
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        //load selection grid for player2
+        
         while(boardDiv.firstChild)//deletes p1's board from screen
         {
             boardDiv.removeChild(boardDiv.lastChild);
         }
+
         whosTurn = 2;
         alert('P2\'s turn for ship selection');//pauses to allow player switching
         loadSelectionGrid(p2shipArr);//loads ship selection screen
@@ -111,6 +115,7 @@ function localIsReady()
         }
         whosTurn = 1;
         alert('P1\'s turn for attack phase');
+
         document.querySelector('#ready').remove();
         document.querySelector('#reset').remove();
 
@@ -148,15 +153,51 @@ function attackLocal(row, col, el)
     }
 }
 
-function loadSelectionGrid(playerShipArray)
+function loadPlayGrid()
 {
-    let canvas = document.querySelector('#notifications').querySelector('canvas');
-    let notifications= canvas.getContext('2d');
-    
     if(whosTurn === 1)
     {
-        notifications.fillStyle = '#c2b280';
-        notifications.fillRect(0,0,100,500);
+        notifications.clearRect(0,0,500,100);
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'Red';
+        notifications.fillText('Choose your attack position (P1)', 0, 50);
+    }
+    else
+    {
+        notifications.clearRect(0,0,500,100);
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'Blue';
+        notifications.fillText('Choose your attack position (P2)', 0, 50);
+    }
+    var gameBoard = document.querySelector('#board');
+    var shipBoard = document.createElement('table');
+    var attackBoard = document.createElement('table');
+
+    gameBoard.appendChild(shipBoard);
+    gameBoard.appendChild(attackBoard);
+    shipBoard.className = 'grid';
+    attackBoard.className = 'grid';
+    for(i=0; i<10; i++)
+    {
+        var row = shipBoard.insertRow(i);
+        for(j=0; j<10; j++)
+        {
+            shipBtn = document.createElement('button');
+            if(arr[i][j] !== 0 )
+            shipBtn.className = 'unselectedShip';
+            var cell = row.insertCell(j);
+            cell.appendChild(shipBtn);
+
+        }
+        for
+        
+    }
+}
+function loadSelectionGrid(playerShipArray)
+{
+    if(whosTurn === 1)
+    {
+        notifications.clearRect(0,0,500,100);
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Red';
         notifications.fillText('Choose Your Ship Positions Player1', 0, 50);
