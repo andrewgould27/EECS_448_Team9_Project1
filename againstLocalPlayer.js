@@ -194,7 +194,7 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
-			console.log(playerShipArray);
+			//console.log(playerShipArray);
                         p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     else
@@ -243,6 +243,9 @@ function p1PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
     {
+	//if(arr[row][col] !== 0){
+	console.log("already occupied");
+	//}
         el.className = 'selectedShip';
 	
 	let color1 = "red";	//A different color is assigned to each ship placed, based on number of ships left
