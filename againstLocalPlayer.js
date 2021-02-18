@@ -93,6 +93,7 @@ function onLoad() //called as soon as script is loaded
     loadSelectionGrid(p1shipArr);
     document.querySelector('#ready').onclick = localIsReady;
 }
+
 /**
  * Called when Ready Button is clicked by the user. If the ready button is selected by
  * Player 1, then Player 2's selection screen is loaded, otherwise Player 1's attack screen
@@ -140,6 +141,7 @@ function localIsReady()//if player 1 is ready for attack phase
         console.log('Not Ready');
     }
 }
+
 /**
  * Function is called when a player selects a square to attack. Depending on who's turn it is,
  * the opposing player's ship configuration is checked for the existence of a ship piece, marked with
@@ -354,6 +356,11 @@ function loadPlayGrid(shipArr, attackArr)
         
     }
 }
+
+/**
+ * Loads ship selection grid for either player 1 or player 2 and modifies the array passed in
+ * @param {Object} playerShipArray double array representing the attacking player's grid of ships
+ */
 function loadSelectionGrid(playerShipArray)
 {
     if(whosTurn === 1)
@@ -439,6 +446,16 @@ function loadSelectionGrid(playerShipArray)
         }
     }
 }
+
+/**
+ * Function is called when user attempts to click on a button on the ship selection grid.
+ * If the user is allowed to select this position, the grid is updated with a color corresponding
+ * to the piece of the ship they just placed
+ * @param {number} row row of player 1's ship array
+ * @param {number} col col of player 1's ship array
+ * @param {Object} el the button the user attempted to place on
+ * @param {Object} arr player 1's ship array
+ */
 function p1PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
@@ -480,6 +497,16 @@ function p1PlaceShipPiece(row, col, el, arr)
         canSelect = false;
     }
 }
+
+/**
+ * Function is called when user attempts to click on a button on the ship selection grid.
+ * If the user is allowed to select this position, the grid is updated with a color corresponding
+ * to the piece of the ship they just placed
+ * @param {number} row row of player 2's ship array
+ * @param {number} col col of player 2's ship array
+ * @param {Object} el the button the user attempted to place on
+ * @param {Object} arr player 2's ship array
+ */
 function p2PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
@@ -521,6 +548,8 @@ function p2PlaceShipPiece(row, col, el, arr)
         canSelect = false;
     }
 }
+
+
 function canPlace(row, col, arr, numPieces, numShips)
 {
     if(arr[row][col] !== 0)
