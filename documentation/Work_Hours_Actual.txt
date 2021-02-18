@@ -28,9 +28,10 @@ Griffin: 1.0h
 
 2/17/21
 Neel: 2.0h
-
+Griffin: 1.0h
+Zongle:0.50h
 2/18/21
-
+Zongle: 1.0h
 
 2/19/21
 

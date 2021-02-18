@@ -30,20 +30,50 @@ canvas{
    background-color: #76b6c4;
    color: white;
 }
+
+
 .unselectedShip{
     border-radius: 5px;
     border: 4px double #000000;
     padding: 20px;
     background-color: white;
 }
-
-.selectedShip{
+.ship_6{
     border-radius: 10px;
     border: 4px double #000000;
     padding: 20px;
-    //background-color: green;
+    background-color: Cyan;
 }
-
+.ship_5{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: CadetBlue;
+}
+.ship_4{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: DarkSeaGreen;
+}
+.ship_3{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(81, 211, 81);
+}
+.ship_2{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(68, 57, 231);
+}
+.ship_1{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(23, 160, 114);
+}
 .attackedShip{
     border-radius: 10px;
     border: 4px double #000000;
@@ -57,21 +87,18 @@ canvas{
     padding: 20px;
     background-color: white;
 }
-
 .successfulAttack{
     border-radius: 5px;
     border: 4px double #000000;
     padding: 20px;
     background-color: red;
 }
-
 .pendingAttack{
     border-radius: 5px;
     border: 4px double #000000;
     padding: 20px;
     background-color: pink;
 }
-
 .missedAttack{
     border-radius: 5px;
     border: 4px double #000000;
@@ -92,19 +119,15 @@ table{
 .startButton{
     padding: 10px;
     margin: auto;
-    
 }
-
-#buttons{
+#inGameButtons{
     /* align-items:center; */
     display: flex;
     /* padding: 10px; */
     margin-left:11%;
     margin-right:11%;
 }
-
 #boardDiv {
     align-items: center;
     display: flex;
 }
-
