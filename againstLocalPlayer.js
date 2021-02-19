@@ -65,6 +65,8 @@ let p2NumHits = 0;
 let p2NumShips = numShipsChoice;
 let p2NumPieces;
 
+let lastPos = [];	//variable holding the element of previous placed ship
+
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
 
@@ -418,20 +420,16 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
-			if(event.button==0){//only place ship piece if left mouse button is clicked
-				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			}else if(event.button==2){
-			}
+			console.log(p1NumPieces);
+			p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     else
                     {
-                        if(event.button==0){
-				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			}else if(event.button==2){
-			}
+			p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     mouseDown = true;
                 }
+		
             });
             shipBtn.addEventListener("mousemove", function(){
                 if(canSelect === true)
@@ -440,37 +438,26 @@ function loadSelectionGrid(playerShipArray)
                     {
                         if(whosTurn === 1)
                         {
-                            if(event.button==0){
 				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			    }else if(event.button==2){
-			    }
                         }
                         else if(whosTurn === 2)
                         {
-                            if(event.button==0){
 				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			    }else if(event.button==2){
-			    }
                         }
                     }
                 }
+		
             });
             shipBtn.addEventListener("mouseup", function(){
                 if(canSelect === true)
                 {
                     if(whosTurn === 1)
                     {
-                        if(event.button==0){
-				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			}else if(event.button==2){
-			}
+			p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     else
                     {
-                        if(event.button==0){
-				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-			}else if(event.button==2){
-			}
+			p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     mouseDown = false;
                 }
@@ -479,6 +466,36 @@ function loadSelectionGrid(playerShipArray)
             cell.appendChild(shipBtn);
         }
     }
+}
+
+
+/**
+*this function is called by the undo button in PlayerScreen.html. It deselects the *element that was previously selected and adjusts the variables p1NumPieces, p2 *Numpieces, p1Ships, and p2Ships so a button can be reselected.
+*/
+function undo()
+{	
+	el = lastPos[0];
+	row = el.parentNode.parentNode.rowIndex;
+	col = el.parentNode.cellIndex;
+	if(whosTurn==1){
+		p1shipArr[row][col] = 0;
+		p1NumPieces ++;
+		if(p1NumPieces>=p1NumShips){
+			p1NumPieces = 1;
+			p1NumShips ++;
+		}
+		
+	}else{
+		p2shipArr[row][col] = 0;
+		p2NumPieces ++;
+		if(p2NumPieces>=p2NumShips){
+			p2NumPieces = 1;
+			p2NumShips ++;
+		}
+	}
+	el.className = 'unselectedShip';
+	lastPos.shift();
+	
 }
 
 /**
@@ -494,6 +511,7 @@ function p1PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
     {
+	lastPos.unshift(el);
 	//if(arr[row][col] !== 0){
 	console.log("already occupied");
 	//}
@@ -531,10 +549,19 @@ function p1PlaceShipPiece(row, col, el, arr)
     else if(p1NumPieces === 0 && p1NumShips === 0)
     {
         console.log("selection phase over");
-        canSelect = false;
+        //canSelect = false;
     }
 }
-
+/*
+*ships	pieces
+*3	3
+*3	2
+*3	1
+*2	2
+*2	1
+*1	1
+*0	0
+*/
 /**
  * Function is called when user attempts to click on a button on the ship selection grid.
  * If the user is allowed to select this position, the grid is updated with a color corresponding
@@ -548,6 +575,7 @@ function p2PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
     {
+	lastPos.unshift(el);
         el.className = 'selectedShip';
         switch(p2NumShips%7){//modified to use css styling
             case 1:
@@ -582,7 +610,7 @@ function p2PlaceShipPiece(row, col, el, arr)
     else if(p2NumPieces === 0 && p2NumShips === 0)
     {
         console.log("selection phase over");
-        canSelect = false;
+        //canSelect = false;
     }
 }
 
