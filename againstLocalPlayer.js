@@ -1,6 +1,6 @@
 /**
  * @file Functions, methods, and DOM modifications for playing a local-two player game.
- * @author
+ * @author Team 9
  */
 var p1attackArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -95,46 +95,82 @@ function onLoad() //called as soon as script is loaded
 }
 
 /**
+ * Called when player is done with ship selection or attack turn.
+ * Removes all objects within board div and loads a button that must
+ * be clicked before proceeding to the next player's turn. 
+ * @param {Object} shipArr 
+ * @param {Object} attackArr 
+ */
+function loadNextTurn(shipArr, attackArr)
+{
+    let boardDiv = document.querySelector('#board');
+    let switchPlayerButton = document.createElement('button');
+
+    notifications.clearRect(0,0, 500, 100);
+    while(boardDiv.firstChild)//deletes p1's board from screen
+    {
+        boardDiv.removeChild(boardDiv.lastChild);
+    }
+    
+    switchPlayerButton.id = 'privacyButton';
+    if(whosTurn === 1)
+    {
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'Blue';
+        notifications.fillText('P2\'s Turn', 0, 50);
+    }
+    else
+    {
+        notifications.font = '30px Arial';
+        notifications.fillStyle = 'Red';
+        notifications.fillText('P1\'s Turn', 0, 50);
+    }
+    switchPlayerButton.innerText = 'Click When Ready';
+    switchPlayerButton.addEventListener('click',  () => {
+        switchPlayerButton.remove();
+        canSelect = true;
+        whosTurn = (whosTurn%2) + 1;
+        if(p1NumShips !== 0 || p2NumShips !== 0)
+        {
+            document.querySelector('#ready').disabled = false;
+            document.querySelector('#reset').disabled = false;
+            document.querySelector('#ready').hidden = false;
+            document.querySelector('#reset').hidden = false;
+            loadSelectionGrid(shipArr);
+        }
+        else
+        {
+            loadPlayGrid(shipArr,attackArr);
+        }
+    });
+    document.querySelector('#boardDiv').appendChild(switchPlayerButton);
+}
+/**
  * Called when Ready Button is clicked by the user. If the ready button is selected by
  * Player 1, then Player 2's selection screen is loaded, otherwise Player 1's attack screen
  * is loaded allowing the beginning of the gameplay loop.
  */
 function localIsReady()//if player 1 is ready for attack phase
 {
-    let boardDiv = document.querySelector('#board');
     if(p1NumShips === 0 && whosTurn === 1)
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        whosTurn = 2;
+        document.querySelector('#ready').hidden = true;
+        document.querySelector('#reset').hidden = true;
         setTimeout(() => {
-            while(boardDiv.firstChild)//deletes p1's board from screen
-            {
-                boardDiv.removeChild(boardDiv.lastChild);
-            }
-            loadSelectionGrid(p2shipArr);//loads ship selection screen
-            document.querySelector('#ready').disabled = false;
-            document.querySelector('#reset').disabled = false;
-            canSelect = true;
-        }, 3000);//pauses to allow player switching
+            loadNextTurn(p2shipArr, p2attackArr);//loads privacy screen
+        }, 1000);//pauses before loading privacy screen
         
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
-        document.querySelector('#ready').disabled = true;
-        document.querySelector('#reset').disabled = true;
-        whosTurn = 1;
+        document.querySelector('#ready').remove();
+        document.querySelector('#reset').remove();
         setTimeout(() => {
-            while(boardDiv.firstChild)
-            {
-                boardDiv.removeChild(boardDiv.lastChild);
-            }
-            document.querySelector('#ready').remove();
-            document.querySelector('#reset').remove();
-            canSelect = true;
-            loadPlayGrid(p1shipArr, p1attackArr);
-        }, 3000);
+            loadNextTurn(p1shipArr, p1attackArr);
+        }, 1000);
     }
     else
     {
@@ -155,9 +191,6 @@ function localIsReady()//if player 1 is ready for attack phase
  */
 function attackLocal(row, col, attackArr, button)
 {
-    //test
-    let boardDiv = document.querySelector('#board');
-
     if(whosTurn === 1)
     {
         if(p2shipArr[row][col] !== 0 )
@@ -180,9 +213,8 @@ function attackLocal(row, col, attackArr, button)
                 notifications.fillStyle = 'Red';
                 notifications.fillText('Hit!', 0, 50);
                 window.setTimeout(()=>{
-                    loadPlayGrid(p2shipArr, p2attackArr);
-                    canSelect = true;
-                }, 3100);
+                    loadNextTurn(p2shipArr, p2attackArr);
+                }, 1000);
             }
         }
         else
@@ -194,17 +226,9 @@ function attackLocal(row, col, attackArr, button)
             notifications.fillStyle = 'Red';
             notifications.fillText('Miss', 0, 50);
             window.setTimeout(()=>{
-                loadPlayGrid(p2shipArr, p2attackArr);
-                canSelect = true;
-            }, 3100);
+                loadNextTurn(p2shipArr, p2attackArr);
+            }, 1000);
         }
-        window.setTimeout(() => {
-            whosTurn = 2;
-            while(boardDiv.firstChild)
-            {
-                boardDiv.removeChild(boardDiv.lastChild);
-            }
-        }, 3000 );
     }
     else
     {
@@ -228,9 +252,8 @@ function attackLocal(row, col, attackArr, button)
                 notifications.fillStyle = 'Blue';
                 notifications.fillText('Hit!', 0, 50);
                 window.setTimeout(()=>{
-                    loadPlayGrid(p1shipArr, p1attackArr);
-                    canSelect = true;
-                }, 3100);
+                    loadNextTurn(p1shipArr, p1attackArr);
+                }, 1000);
             }
         }
         else
@@ -242,17 +265,9 @@ function attackLocal(row, col, attackArr, button)
             notifications.fillStyle = 'Blue';
             notifications.fillText('Miss', 0, 50);
             window.setTimeout(()=>{
-                loadPlayGrid(p1shipArr, p1attackArr);
-                canSelect = true;
-            }, 3100);
+                loadNextTurn(p1shipArr, p1attackArr);
+            }, 1000);
         }
-        window.setTimeout(() => {
-            whosTurn = 1;
-            while(boardDiv.firstChild)
-            {
-                boardDiv.removeChild(boardDiv.lastChild);
-            }
-        }, 3000 );
     }
 }
 
@@ -414,7 +429,7 @@ function loadSelectionGrid(playerShipArray)
             shipBtn.addEventListener("mousemove", function(){
                 if(canSelect === true)
                 {
-                    if(mouseDown === true )
+                    if(mouseDown === true)
                     {
                         if(whosTurn === 1)
                         {
@@ -551,7 +566,9 @@ function p2PlaceShipPiece(row, col, el, arr)
 
 /**
  * Function is called when user attempts to click on a button on the ship selection grid.
- * If the user is allowed to select this position, true is returned, otherwise false
+ * If the user is allowed to select this position, true is returned, otherwise false.
+ * Function checks number of ship pieces remaining to be placed in order to determine the
+ * orientation of the ship and whether a ship can actually be placed at this location.
  * @param {number} row row of the ship array to check 
  * @param {number} col col of the ship array to check
  * @param {Object} arr the array being checked

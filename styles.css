@@ -16,6 +16,13 @@ canvas{
     display: flex;
     margin: auto;
 }
+#privacyButton{
+    border-radius: 5px;
+    margin: auto;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: white;
+}
 
 .introScreen{
     color: white;
