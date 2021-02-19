@@ -1,4 +1,8 @@
-//functions for use in games with two-players using the same computer
+/**
+ * @file Functions, methods, and DOM modifications for playing a local-two player game.
+ * @author
+ */
+
 var p1attackArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -47,6 +51,7 @@ var p2shipArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
+
 let numShipsChoice;
 let hitsToWin = 0;
 let whosTurn = 1;
@@ -63,14 +68,22 @@ let p2NumPieces;
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
 
+var gameNumber = 0;
+
 onLoad();
 
+/**
+ * Configures variables and removes configuration buttons. Loads the ship selection screen
+ * for Player 1.
+ */
 function onLoad() //called as soon as script is loaded
 {
     configButtons = document.querySelector('#configButtons');
-    
+
     numShipsChoice=parseInt(document.querySelector('#chooseNumShips').value);
     configButtons.remove();
+    gameNumber += 1;
+
     for(let i=numShipsChoice; i>0; i--)
     {
         hitsToWin += i;
@@ -83,9 +96,22 @@ function onLoad() //called as soon as script is loaded
     p1NumPieces = p1NumShips;
     p2NumShips = numShipsChoice;
     p2NumPieces = p2NumShips;
+
+/*******************************************
+* This function stores game values in the cache
+*           -Cade
+*******************************************/
+    storeValues(p1NumShips, p2NumShips);
+
     loadSelectionGrid(p1shipArr);
     document.querySelector('#ready').onclick = localIsReady;
 }
+
+/**
+ * Called when Ready Button is clicked by the user. If the ready button is selected by
+ * Player 1, then Player 2's selection screen is loaded, otherwise Player 1's attack screen
+ * is loaded allowing the beginning of the gameplay loop.
+ */
 function localIsReady()//if player 1 is ready for attack phase
 {
     let boardDiv = document.querySelector('#board');
@@ -93,45 +119,54 @@ function localIsReady()//if player 1 is ready for attack phase
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        
-        while(boardDiv.firstChild)//deletes p1's board from screen
-        {
-            boardDiv.removeChild(boardDiv.lastChild);
-        }
-
         whosTurn = 2;
         setTimeout(() => {
+            while(boardDiv.firstChild)//deletes p1's board from screen
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
             loadSelectionGrid(p2shipArr);//loads ship selection screen
             document.querySelector('#ready').disabled = false;
             document.querySelector('#reset').disabled = false;
             canSelect = true;
         }, 3000);//pauses to allow player switching
-        
+
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
-        while(boardDiv.firstChild)
-        {
-            boardDiv.removeChild(boardDiv.lastChild);
-        }
+        document.querySelector('#ready').disabled = true;
+        document.querySelector('#reset').disabled = true;
         whosTurn = 1;
-        setTimeout(3000, () => {alert('Switch to P1')});
-        document.querySelector('#ready').remove();
-        document.querySelector('#reset').remove();
-        canSelect = true;
-        notifications.clearRect(0,0,500,100);
-        notifications.font = '30px Arial';
-        notifications.fillStyle = 'Red';
-        notifications.fillText('P1\'s turn to attack', 0, 50);
-        loadPlayGrid(p1shipArr, p1attackArr);
+        setTimeout(() => {
+            while(boardDiv.firstChild)
+            {
+                boardDiv.removeChild(boardDiv.lastChild);
+            }
+            document.querySelector('#ready').hidden = true;
+            document.querySelector('#reset').hidden = true;
+            canSelect = true;
+            loadPlayGrid(p1shipArr, p1attackArr);
+        }, 3000);
     }
     else
     {
         console.log('Not Ready');
     }
 }
-function attackLocal(row, col, attackArr, el)
+
+/**
+ * Function is called when a player selects a square to attack. Depending on who's turn it is,
+ * the opposing player's ship configuration is checked for the existence of a ship piece, marked with
+ * a -1 on a hit, and the grid is modified to reflect the hit, by the coloring of a button.
+ * If a ship is at the chosen location and all ship pieces have been hit, the player is notified of their victory.
+ * Otherwise, the opposing player's screen is switched to after a 3 second timeout.
+ * @param {number} row row of the opposing player's ship array
+ * @param {number} col col of the opposing player's ship array
+ * @param {Object} attackArr double array representing the attacking player's grid of attacks
+ * @param {Object} button the button to modify after a miss or a hit
+ */
+function attackLocal(row, col, attackArr, button)
 {
     //test
     let boardDiv = document.querySelector('#board');
@@ -142,47 +177,49 @@ function attackLocal(row, col, attackArr, el)
         {
             p1NumHits++;
             attackArr[row][col] = 1;
-            el.className = 'successfulAttack';
+            p2shipArr[row][col] = -1;
+            button.className = 'successfulAttack';
             if(p1NumHits === hitsToWin)
             {
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
                 notifications.fillText('P1 YOU WIN!', 0, 50);
+                document.querySelectorAll('.endButton').forEach(
+                    function(el){el.hidden = false;} );
             }
             else
             {
-                whosTurn = 2;
-                window.setTimeout(3000, () => {alert('Switch to P2');});
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
-                notifications.fillStyle = 'Blue';
-                notifications.fillText('P2\'s turn to attack', 0, 50);
-                while(boardDiv.firstChild)
-                {
-                    boardDiv.removeChild(boardDiv.lastChild);
-                }
-                loadPlayGrid(p2shipArr, p2attackArr);
-                canSelect = true;
+                notifications.fillStyle = 'Red';
+                notifications.fillText('Hit!', 0, 50);
+                window.setTimeout(()=>{
+                    loadPlayGrid(p2shipArr, p2attackArr);
+                    canSelect = true;
+                }, 3100);
             }
         }
         else
         {
             attackArr[row][col] = -1;
-            el.className = 'missedAttack';
-            whosTurn = 2;
-            window.setTimeout(3000, () => {alert('Switch to P2')});
+            button.className = 'missedAttack';
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
-            notifications.fillStyle = 'Blue';
-            notifications.fillText('P2\'s turn to attack', 0, 50);
+            notifications.fillStyle = 'Red';
+            notifications.fillText('Miss', 0, 50);
+            window.setTimeout(()=>{
+                loadPlayGrid(p2shipArr, p2attackArr);
+                canSelect = true;
+            }, 3100);
+        }
+        window.setTimeout(() => {
+            whosTurn = 2;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            loadPlayGrid(p2shipArr, p2attackArr);
-            canSelect = true;
-        }
+        }, 3000 );
     }
     else
     {
@@ -190,50 +227,59 @@ function attackLocal(row, col, attackArr, el)
         {
             p2NumHits++;
             attackArr[row][col] = 1;
-            el.className = 'successfulAttack';
+            p1shipArr[row][col] = -1;
+            button.className = 'successfulAttack';
             if(p2NumHits === hitsToWin)
             {
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
                 notifications.fillText('P2 YOU WIN!', 0, 50);
+                document.querySelectorAll('.endButton').forEach(
+                    function(el){el.hidden = false;} );
             }
             else
             {
-                whosTurn = 1;
-                window.setTimeout(3000, () => {alert('Switch to P1')});
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
-                notifications.fillStyle = 'Red';
-                notifications.fillText('P1\'s turn to attack', 0, 50);
-                while(boardDiv.firstChild)
-                {
-                    boardDiv.removeChild(boardDiv.lastChild);
-                }
-                loadPlayGrid(p1shipArr, p1attackArr);
-                canSelect = true;
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Hit!', 0, 50);
+                window.setTimeout(()=>{
+                    loadPlayGrid(p1shipArr, p1attackArr);
+                    canSelect = true;
+                }, 3100);
             }
         }
         else
         {
             attackArr[row][col] = -1;
-            el.className = 'missedAttack';
-            whosTurn = 1;
-            window.setTimeout(3000, () => {alert('Switch to P1')});
+            button.className = 'missedAttack';
             notifications.clearRect(0,0,500,100);
             notifications.font = '30px Arial';
-            notifications.fillStyle = 'Red';
-            notifications.fillText('P1\'s turn to attack', 0, 50);
+            notifications.fillStyle = 'Blue';
+            notifications.fillText('Miss', 0, 50);
+            window.setTimeout(()=>{
+                loadPlayGrid(p1shipArr, p1attackArr);
+                canSelect = true;
+            }, 3100);
+        }
+        window.setTimeout(() => {
+            whosTurn = 1;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            loadPlayGrid(p1shipArr, p1attackArr);
-            canSelect = true;
-        }
+        }, 3000 );
     }
 }
 
+/**
+ * Loads ship grid and attack grid for current player. Since ship selection is ended, ship selection grid is no longer modifiable,
+ * but attack selection grid is. On selection of a attack position, attackLocal function is called to allow necessary modifications
+ * to be made to the opposing player's ship array and the current player's button grid
+ * @param {Object} shipArr double array representing the attacking player's grid of ships
+ * @param {Object} attackArr double array representing the attacking player's grid of misses and hits
+ */
 function loadPlayGrid(shipArr, attackArr)
 {
     if(whosTurn === 1)
@@ -280,7 +326,7 @@ function loadPlayGrid(shipArr, attackArr)
                     break;
                 case 5:
                     shipBtn.className = 'ship_5';
-                    break;        
+                    break;
                 case 6:
                     shipBtn.className = 'ship_6';
                     break;
@@ -294,9 +340,7 @@ function loadPlayGrid(shipArr, attackArr)
             cell = row.insertCell(j);
             cell.appendChild(shipBtn);
         }
-        
 
-        
         row = attackBoard.insertRow(i);
         for(let k=0; k<10; k++)
         {
@@ -326,9 +370,14 @@ function loadPlayGrid(shipArr, attackArr)
             cell = row.insertCell(k);
             cell.appendChild(atkBtn);
         }
-        
+
     }
 }
+
+/**
+ * Loads ship selection grid for either player 1 or player 2 and modifies the array passed in
+ * @param {Object} playerShipArray double array representing the attacking player's grid of ships
+ */
 function loadSelectionGrid(playerShipArray)
 {
     if(whosTurn === 1)
@@ -364,7 +413,7 @@ function loadSelectionGrid(playerShipArray)
             shipBtn = document.createElement('button');
             shipBtn.className = 'unselectedShip';
             shipBtn.addEventListener("mousedown", function(){
-                
+
                 if(canSelect === true)
                 {
                     if(whosTurn === 1)
@@ -374,6 +423,7 @@ function loadSelectionGrid(playerShipArray)
                     }
                     else
                     {
+      console.log(playerShipArray);
                         p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     mouseDown = true;
@@ -414,6 +464,16 @@ function loadSelectionGrid(playerShipArray)
         }
     }
 }
+
+/**
+ * Function is called when user attempts to click on a button on the ship selection grid.
+ * If the user is allowed to select this position, the grid is updated with a color corresponding
+ * to the piece of the ship they just placed
+ * @param {number} row row of player 1's ship array
+ * @param {number} col col of player 1's ship array
+ * @param {Object} el the button the user attempted to place on
+ * @param {Object} arr player 1's ship array
+ */
 function p1PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p1NumPieces, p1NumShips) && p1NumPieces > 0 )
@@ -437,7 +497,7 @@ function p1PlaceShipPiece(row, col, el, arr)
                 break;
             case 5:
                 el.className = 'ship_5';
-                break;        
+                break;
             case 6:
                 el.className = 'ship_6';
                 break;
@@ -458,6 +518,16 @@ function p1PlaceShipPiece(row, col, el, arr)
         canSelect = false;
     }
 }
+
+/**
+ * Function is called when user attempts to click on a button on the ship selection grid.
+ * If the user is allowed to select this position, the grid is updated with a color corresponding
+ * to the piece of the ship they just placed
+ * @param {number} row row of player 2's ship array
+ * @param {number} col col of player 2's ship array
+ * @param {Object} el the button the user attempted to place on
+ * @param {Object} arr player 2's ship array
+ */
 function p2PlaceShipPiece(row, col, el, arr)
 {
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
@@ -478,7 +548,7 @@ function p2PlaceShipPiece(row, col, el, arr)
                 break;
             case 5:
                 el.className = 'ship_5';
-                break;        
+                break;
             case 6:
                 el.className = 'ship_6';
                 break;
@@ -499,6 +569,8 @@ function p2PlaceShipPiece(row, col, el, arr)
         canSelect = false;
     }
 }
+
+
 function canPlace(row, col, arr, numPieces, numShips)
 {
     if(arr[row][col] !== 0)
@@ -524,7 +596,7 @@ function canPlace(row, col, arr, numPieces, numShips)
         else
         {
             return false;
-        }        
+        }
     }
     else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && arr[row-1][col] === numShips) ||  (row+1 <10 &&arr[row+1][col] === numShips)))
     {
@@ -557,7 +629,7 @@ function resetShipGrid()
         p2NumShips=numShipsChoice;
         p2NumPieces=p2NumShips;
     }
-    
+
 
     for(let i=0; i<10; i++)
     {
@@ -575,6 +647,6 @@ function resetShipGrid()
                 p2shipArr[i][j]=0;
             }
         }
-        
+
     }
 }
