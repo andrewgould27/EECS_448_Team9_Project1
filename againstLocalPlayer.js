@@ -418,13 +418,17 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
-			//console.log(playerShipArray);
-                        p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			if(event.button==0){//only place ship piece if left mouse button is clicked
+				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			}else if(event.button==2){
+			}
                     }
                     else
                     {
-      console.log(playerShipArray);
-                        p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                        if(event.button==0){
+				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			}else if(event.button==2){
+			}
                     }
                     mouseDown = true;
                 }
@@ -436,11 +440,17 @@ function loadSelectionGrid(playerShipArray)
                     {
                         if(whosTurn === 1)
                         {
-                            p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                            if(event.button==0){
+				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			    }else if(event.button==2){
+			    }
                         }
                         else if(whosTurn === 2)
                         {
-                            p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                            if(event.button==0){
+				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			    }else if(event.button==2){
+			    }
                         }
                     }
                 }
@@ -450,11 +460,17 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
-                        p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                        if(event.button==0){
+				p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			}else if(event.button==2){
+			}
                     }
                     else
                     {
-                        p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                        if(event.button==0){
+				p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+			}else if(event.button==2){
+			}
                     }
                     mouseDown = false;
                 }
