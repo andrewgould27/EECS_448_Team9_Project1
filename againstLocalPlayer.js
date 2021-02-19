@@ -549,7 +549,15 @@ function p2PlaceShipPiece(row, col, el, arr)
     }
 }
 
-
+/**
+ * Function is called when user attempts to click on a button on the ship selection grid.
+ * If the user is allowed to select this position, true is returned, otherwise false
+ * @param {number} row row of the ship array to check 
+ * @param {number} col col of the ship array to check
+ * @param {Object} arr the array being checked
+ * @param {Object} numPieces the number of pieces remaining of the current ship to be placed
+ * @param {Object} numShips the number of ships remaining to be placed
+ */
 function canPlace(row, col, arr, numPieces, numShips)
 {
     if(arr[row][col] !== 0)
@@ -590,6 +598,10 @@ function canPlace(row, col, arr, numPieces, numShips)
         return false;
     }
 }
+/**
+ * Resets ship array of the player clicking the reset button and restyles all buttons to reflect
+ * the emptied ship selection grid.
+ */
 function resetShipGrid()
 {
     console.log('reset button selected');
