@@ -469,21 +469,35 @@ function loadSelectionGrid(playerShipArray)
 }
 
 /**
-*this function is called by the undo button in PlayerScreen.html. It deselects the *element that was previously selected and adjusts the variables p1NumPieces, p2 *Numpieces, p1Ships, and p2Ships so a button can be reselected.
+*this function is called by the undo button in PlayerScreen.html. It deselects the *elements that were previously selected and adjusts the variables p1NumPieces, p2 *Numpieces, p1Ships, and p2Ships so a ship can be reselected
 */
 function undo()
 {
+	numPieces = 0;
+	numShips = 0;
+	if(whosTurn == 1){
+		numPieces = p1NumPieces;
+		numShips = p1NumShips;
+	}else{
+		numPieces = p2NumPieces;
+		numShips = p2NumShips;
+	}
+
 	num = 0;
-	if(p1NumShips==p1NumPieces){
-		num = p1NumShips+1;
-	}else if(p1NumPieces<p1NumShips){
-		num = p1NumShips-p1NumPieces;
+	if(numShips==numPieces){
+		num = numShips+1;
+	}else if(numPieces<numShips){
+		num = numShips-numPieces;
 	}
 	for(i = 0; i < num; i ++){
 		undoSquare();
 	}
 }
 
+/*
+*This function is called by undo() and it deselects individual button elements and changes the NumPieces and NumShips variables
+*
+*/
 function undoSquare()
 {	
 	el = lastPos[0];
