@@ -9,10 +9,10 @@
         <!--Script for loading game board and allowing ship selection-->
         <script src="gameModeConfig.js"></script>
         <!--Scripts appended as needed for selected game mode allowing improved modularity-->
-        
+
     </head>
     <body>
-        <!-- intro screen buttons--> 
+        <!-- intro screen buttons-->
         <div id="configButtons">
             <button class="introScreen" id="local" onclick="main(this)">Play Against Friend Locally</button>
             <select name="numShips" id="chooseNumShips">
@@ -26,18 +26,21 @@
             <button class="introScreen" id="botGame" onclick="main(this)">Play Against Computer</button>
         </div>
 
-        <!-- Div for boards; actual buttons are appended using js script--> 
+        <!-- Div for boards; actual buttons are appended using js script-->
         <div id="notifications">
             <canvas height=100px width=500px></canvas>
         </div>
-        <!-- Div for boards; actual buttons are appended using js script--> 
+        <!-- Div for boards; actual buttons are appended using js script-->
         <div id="boardDiv"><span id="board"></span></div>
-        <!-- Div for player ready buttons and to reset their ship board up until game has started--> 
+        <!-- Div for player ready buttons and to reset their ship board up until game has started-->
         <span id="inGameButtons">
             <button id="reset" class="startButton" hidden=true onclick="resetShipGrid()">Reset</button>
             <!-- <button class="startButton" hidden=true>Start</button> -->
             <button id="ready" class="startButton" hidden=true>Ready</button>
+            <!--<button id="homeButton" class="endButton" hidden=true onclick="returnToMenu()">Main Menu</button> -->
+            <button id="restartButton" class="endButton" hidden=true onclick="playAgain()">Restart Game</button>
         </span>
+
 
     </body>
 </html>

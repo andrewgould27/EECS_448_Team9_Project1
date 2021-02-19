@@ -2,6 +2,7 @@
  * @file Functions, methods, and DOM modifications for playing a local-two player game.
  * @author Team 9
  */
+
 var p1attackArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -50,9 +51,10 @@ var p2shipArr = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-let numShipsChoice;
+
+let numShipsChoice = 0;
 let hitsToWin = 0;
-let whosTurn = 1;
+let whosTurn;
 let canSelect = true;
 
 let p1NumHits = 0;
@@ -66,6 +68,8 @@ let p2NumPieces;
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
 
+let gameNumber = 1;
+
 onLoad();
 
 /**
@@ -74,10 +78,20 @@ onLoad();
  */
 function onLoad() //called as soon as script is loaded
 {
+    whosTurn = 1;
+    canSelect = true;
     configButtons = document.querySelector('#configButtons');
+
+    if(numShipsChoice===0)
+    {
+        numShipsChoice = parseInt(document.querySelector('#chooseNumShips').value);
+    }
+    while(configButtons.firstChild)//deletes p1's board from screen
+    {
+        configButtons.removeChild(configButtons.lastChild);
+    }
     
-    numShipsChoice=parseInt(document.querySelector('#chooseNumShips').value);
-    configButtons.remove();
+
     for(let i=numShipsChoice; i>0; i--)
     {
         hitsToWin += i;
@@ -90,6 +104,7 @@ function onLoad() //called as soon as script is loaded
     p1NumPieces = p1NumShips;
     p2NumShips = numShipsChoice;
     p2NumPieces = p2NumShips;
+
     loadSelectionGrid(p1shipArr);
     document.querySelector('#ready').onclick = localIsReady;
 }
@@ -166,8 +181,8 @@ function localIsReady()//if player 1 is ready for attack phase
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
-        document.querySelector('#ready').remove();
-        document.querySelector('#reset').remove();
+        document.querySelector('#ready').hidden = true;
+        document.querySelector('#reset').hidden = true;
         setTimeout(() => {
             loadNextTurn(p1shipArr, p1attackArr);
         }, 1000);
@@ -205,6 +220,8 @@ function attackLocal(row, col, attackArr, button)
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
                 notifications.fillText('P1 YOU WIN!', 0, 50);
+                document.querySelectorAll('.endButton').forEach(
+                    function(el){el.hidden = false;} );
             }
             else
             {
@@ -244,6 +261,8 @@ function attackLocal(row, col, attackArr, button)
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
                 notifications.fillText('P2 YOU WIN!', 0, 50);
+                document.querySelectorAll('.endButton').forEach(
+                    function(el){el.hidden = false;} );
             }
             else
             {
@@ -324,7 +343,7 @@ function loadPlayGrid(shipArr, attackArr)
                     break;
                 case 5:
                     shipBtn.className = 'ship_5';
-                    break;        
+                    break;
                 case 6:
                     shipBtn.className = 'ship_6';
                     break;
@@ -338,7 +357,7 @@ function loadPlayGrid(shipArr, attackArr)
             cell = row.insertCell(j);
             cell.appendChild(shipBtn);
         }
-        
+
         row = attackBoard.insertRow(i);
         for(let k=0; k<10; k++)
         {
@@ -368,7 +387,7 @@ function loadPlayGrid(shipArr, attackArr)
             cell = row.insertCell(k);
             cell.appendChild(atkBtn);
         }
-        
+
     }
 }
 
@@ -411,7 +430,7 @@ function loadSelectionGrid(playerShipArray)
             shipBtn = document.createElement('button');
             shipBtn.className = 'unselectedShip';
             shipBtn.addEventListener("mousedown", function(){
-                
+
                 if(canSelect === true)
                 {
                     if(whosTurn === 1)
@@ -421,6 +440,7 @@ function loadSelectionGrid(playerShipArray)
                     }
                     else
                     {
+      console.log(playerShipArray);
                         p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     mouseDown = true;
@@ -491,7 +511,7 @@ function p1PlaceShipPiece(row, col, el, arr)
                 break;
             case 5:
                 el.className = 'ship_5';
-                break;        
+                break;
             case 6:
                 el.className = 'ship_6';
                 break;
@@ -542,7 +562,7 @@ function p2PlaceShipPiece(row, col, el, arr)
                 break;
             case 5:
                 el.className = 'ship_5';
-                break;        
+                break;
             case 6:
                 el.className = 'ship_6';
                 break;
@@ -600,7 +620,7 @@ function canPlace(row, col, arr, numPieces, numShips)
         else
         {
             return false;
-        }        
+        }
     }
     else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && arr[row-1][col] === numShips) ||  (row+1 <10 &&arr[row+1][col] === numShips)))
     {
@@ -637,7 +657,7 @@ function resetShipGrid()
         p2NumShips=numShipsChoice;
         p2NumPieces=p2NumShips;
     }
-    
+
 
     for(let i=0; i<10; i++)
     {
@@ -655,6 +675,31 @@ function resetShipGrid()
                 p2shipArr[i][j]=0;
             }
         }
-        
+
     }
+}
+/**
+ * Resets all variables
+ */
+function playAgain()
+{
+    document.querySelectorAll('.endButton').forEach(
+        (el) => {el.hidden = true;} );
+    let boardDiv = document.querySelector('#board');
+    notifications.clearRect(0,0, 500, 100);
+    while(boardDiv.firstChild)//deletes p1's board from screen
+    {
+        boardDiv.removeChild(boardDiv.lastChild);
+    }
+    for( let i = 0 ; i<10; i++)
+    {
+        for (let j =0; j<10; j++)
+        {
+            p1attackArr[i][j] = 0;
+            p1shipArr[i][j] = 0;
+            p2attackArr[i][j] = 0;
+            p2shipArr[i][j] = 0;
+        }
+    }
+    onLoad();
 }

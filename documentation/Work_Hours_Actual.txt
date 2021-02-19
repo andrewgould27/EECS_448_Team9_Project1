@@ -35,11 +35,15 @@ Zongle:0.50h
 2/18/21
 Neel: 2.0h
 Zongle: 1.0h
-Cade 2.0h
+Cade 3.5h
 
 2/19/21
+<<<<<<< HEAD
 Neel: 3.0h
 Cade: 1.5h
+=======
+Cade 1.5h
+>>>>>>> fcbd94463ae08068277d16ee9298d00a4d0f3fd8
 
 2/20/21
 

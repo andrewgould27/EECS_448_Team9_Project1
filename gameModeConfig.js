@@ -13,6 +13,13 @@ function main(gameType)
         const localGameScript = document.createElement('script');
         localGameScript.type = 'text/javascript';
         localGameScript.src = 'againstBot.js';
-        document.querySelector('head').appendChild(localGameScript);
+
+        const gameCache = document.createElement('script');
+        gameCache.type = 'text/javascript';
+        gameCache.src = 'gameCache.js';
+
+        document.querySelector('head').appendChild(gameCache);
+        document.querySelector('head').appendChild(gameCache);
     }
+    
 }
