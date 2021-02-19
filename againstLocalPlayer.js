@@ -464,21 +464,45 @@ function p1PlaceShipPiece(row, col, el, arr)
         switch(p1NumShips%7){//modified to use css styling
             case 1:
                 el.className = 'ship_1';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship One', 0, 50);
                 break;
             case 2:
                 el.className = 'ship_2';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Two', 0, 50);
                 break;
             case 3:
                 el.className = 'ship_3';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Three', 0, 50);
                 break;
             case 4:
                 el.className = 'ship_4';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Four', 0, 50);
                 break;
             case 5:
                 el.className = 'ship_5';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Five', 0, 50);
                 break;        
             case 6:
                 el.className = 'ship_6';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Six', 0, 50);
                 break;
         }
         arr[row][col] = p1NumShips;
@@ -515,21 +539,45 @@ function p2PlaceShipPiece(row, col, el, arr)
         switch(p2NumShips%7){//modified to use css styling
             case 1:
                 el.className = 'ship_1';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship One', 0, 50);
                 break;
             case 2:
                 el.className = 'ship_2';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Two', 0, 50);
                 break;
             case 3:
                 el.className = 'ship_3';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Three', 0, 50);
                 break;
             case 4:
                 el.className = 'ship_4';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Four', 0, 50);
                 break;
             case 5:
                 el.className = 'ship_5';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Five', 0, 50);
                 break;        
             case 6:
                 el.className = 'ship_6';
+                notifications.clearRect(0,0,500,100);
+                notifications.font = '30px Arial';
+                notifications.fillStyle = 'Blue';
+                notifications.fillText('Placing Ship Six', 0, 50);
                 break;
         }
         arr[row][col] = p2NumShips;
