@@ -127,6 +127,18 @@ table{
     margin-left:11%;
     margin-right:11%;
 }
+#endMenu{
+	/* align-items:center; */
+	display: flex;
+	/* padding: 10px; */
+	margin-left:11%;
+	margin-right:11%;
+}
+.endButton{
+    padding: 10px;
+    margin: auto;
+}
+
 #boardDiv {
     align-items: center;
     display: flex;
