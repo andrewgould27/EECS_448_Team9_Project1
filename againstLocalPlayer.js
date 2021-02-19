@@ -119,17 +119,17 @@ function localIsReady()//if player 1 is ready for attack phase
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        whosTurn = 2;
         setTimeout(() => {
             while(boardDiv.firstChild)//deletes p1's board from screen
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            loadSelectionGrid(p2shipArr);//loads ship selection screen
-            document.querySelector('#ready').disabled = false;
-            document.querySelector('#reset').disabled = false;
-            canSelect = true;
-        }, 3000);//pauses to allow player switching
+            document.querySelector('#nextSetupButton').hidden = false;
+            // loadSelectionGrid(p2shipArr);//loads ship selection screen
+            // document.querySelector('#ready').disabled = false;
+            // document.querySelector('#reset').disabled = false;
+            // canSelect = true;
+        }, 10);//pauses to allow player switching
 
     }
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
@@ -137,22 +137,68 @@ function localIsReady()//if player 1 is ready for attack phase
         //p1 and p2 should have already selected ships --> load actual game board configuration
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
-        whosTurn = 1;
         setTimeout(() => {
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-            document.querySelector('#ready').hidden = true;
-            document.querySelector('#reset').hidden = true;
-            canSelect = true;
-            loadPlayGrid(p1shipArr, p1attackArr);
-        }, 3000);
+            document.querySelector('#nextSetupButton').hidden = false;
+            //document.querySelector('#ready').hidden = true;
+            //document.querySelector('#reset').hidden = true;
+            //canSelect = true;
+            //loadPlayGrid(p1shipArr, p1attackArr);
+        }, 10);
     }
     else
     {
         console.log('Not Ready');
     }
+}
+
+/**
+ * Function is called when the Next Player Ready button is selected, which allows the program
+ * to continue on through its setup cycle or combat loop.
+ * tldr: creates breakpoints in the program cycle to allow players to switch
+ *          -Cade
+ * @param {number} setupIndex identifies the difference between setup cycle and combat loop
+ */
+function nextPlayerReady(setupIndex)
+{
+  if(p1NumShips === 0 && whosTurn === 1 && setupIndex === 1)
+  {
+    whosTurn = 2;
+    document.querySelector('#nextSetupButton').hidden = true;
+    loadSelectionGrid(p2shipArr);//loads ship selection screen
+    document.querySelector('#ready').disabled = false;
+    document.querySelector('#reset').disabled = false;
+    canSelect = true;
+  }
+  else if(p2NumShips === 0 && whosTurn === 2 && setupIndex === 1)
+  {
+    whosTurn = 1;
+    document.querySelector('#nextSetupButton').hidden = true;
+    document.querySelector('#ready').hidden = true;
+    document.querySelector('#reset').hidden = true;
+    canSelect = true;
+    loadPlayGrid(p1shipArr, p1attackArr);
+  }
+  else if(whosTurn === 1)
+  {
+    console.log("loading player 2 turn")
+    whosTurn = 2;
+    document.querySelector('#nextPlayerButton').hidden = true;
+    loadPlayGrid(p2shipArr, p2attackArr);
+    canSelect = true;
+  }
+  else
+  {
+    console.log("loading player 1 turn")
+    whosTurn = 1;
+    document.querySelector('#nextPlayerButton').hidden = true;
+    loadPlayGrid(p1shipArr, p1attackArr);
+    canSelect = true;
+  }
+
 }
 
 /**
@@ -195,9 +241,10 @@ function attackLocal(row, col, attackArr, button)
                 notifications.fillStyle = 'Red';
                 notifications.fillText('Hit!', 0, 50);
                 window.setTimeout(()=>{
-                    loadPlayGrid(p2shipArr, p2attackArr);
-                    canSelect = true;
-                }, 3100);
+                    document.querySelector('#nextPlayerButton').hidden = false;
+                    // loadPlayGrid(p2shipArr, p2attackArr);
+                    // canSelect = true;
+                }, 100);
             }
         }
         else
@@ -209,17 +256,18 @@ function attackLocal(row, col, attackArr, button)
             notifications.fillStyle = 'Red';
             notifications.fillText('Miss', 0, 50);
             window.setTimeout(()=>{
-                loadPlayGrid(p2shipArr, p2attackArr);
-                canSelect = true;
-            }, 3100);
+                document.querySelector('#nextPlayerButton').hidden = false;
+                // loadPlayGrid(p2shipArr, p2attackArr);
+                // canSelect = true;
+            }, 100);
         }
         window.setTimeout(() => {
-            whosTurn = 2;
+            //whosTurn = 2;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-        }, 3000 );
+        }, 10 );
     }
     else
     {
@@ -245,9 +293,10 @@ function attackLocal(row, col, attackArr, button)
                 notifications.fillStyle = 'Blue';
                 notifications.fillText('Hit!', 0, 50);
                 window.setTimeout(()=>{
-                    loadPlayGrid(p1shipArr, p1attackArr);
-                    canSelect = true;
-                }, 3100);
+                    document.querySelector('#nextPlayerButton').hidden = false;
+                    // loadPlayGrid(p1shipArr, p1attackArr);
+                    // canSelect = true;
+                }, 100);
             }
         }
         else
@@ -259,17 +308,18 @@ function attackLocal(row, col, attackArr, button)
             notifications.fillStyle = 'Blue';
             notifications.fillText('Miss', 0, 50);
             window.setTimeout(()=>{
-                loadPlayGrid(p1shipArr, p1attackArr);
-                canSelect = true;
-            }, 3100);
+                document.querySelector('#nextPlayerButton').hidden = false;
+                // loadPlayGrid(p1shipArr, p1attackArr);
+                // canSelect = true;
+            }, 100);
         }
         window.setTimeout(() => {
-            whosTurn = 1;
+            //whosTurn = 1;
             while(boardDiv.firstChild)
             {
                 boardDiv.removeChild(boardDiv.lastChild);
             }
-        }, 3000 );
+        }, 10 );
     }
 }
 

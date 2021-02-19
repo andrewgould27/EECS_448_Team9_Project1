@@ -10,32 +10,30 @@
 var numShipsChoiceSTORE = 0;
 
 
-/*******************************************
-*   This function takes in the number of ships
-*   used in a game and stores it for later use.
-*           -Cade
-*******************************************/
+/**
+ * Stores value of number of ships used in the game cache. This value is used when restarting the game.
+ *        -Cade
+ * @param {Number} numShips integer value representing number of ships used in previous game
+ */
 function storeValues(numShips)
 {
   numShipsChoiceSTORE = numShips;
 }
 
 
-/*******************************************
-*   This function returns the number of ships
-*   used in the previous game.
-*           -Cade
-*******************************************/
+/**
+ * Returns stored number of ships in order to restart a game of the saem size
+ *        -Cade
+ */
 function returnNumShips()
 {
   return numShipsChoiceSTORE;
 }
 
-/*******************************************
-*   This function returns an empty 10x10 array
-*   for use in resetting the game to empty values.
-*           -Cade
-*******************************************/
+/**
+ * Returns an empty 10x10 array for the purpose of resetting game values on restart
+ *        -Cade
+ */
 function returnEmptyArray()
 {
   return [
