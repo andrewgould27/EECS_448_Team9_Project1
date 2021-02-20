@@ -1,33 +1,8 @@
-
-//features to add: ???local two-player games???
-var attackArr = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
-var shipArr = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+//this file should now be deprecated
+//using for copy pasting functions to other files
 
 var numShipsChoice;
-var selectionPhase = true;
-var player;
+var canSelect = true;
 var numHits = 0;
 var canAttack = false;
 var shipOrientation = 0;
@@ -56,6 +31,17 @@ function main(gameType)
     {
         loadGrid(attackBot);
         document.querySelector('#ready').onclick = botIsReady;
+    }
+    else if(gameType.id === 'local')
+    {
+        whosTurn = 1;
+        p1NumShips = numShipsChoice;
+        p1NumPieces = p1NumShips;
+        p2NumShips = numShipsChoice;
+        p2NumPieces = p2NumShips;
+        
+        loadSelectionGrid(p1shipArr);
+        document.querySelector('#ready').onclick = localIsReady;
     }
     // else if(gameType.id === 'onlineGame')//for possible game against another player
     // {
@@ -91,27 +77,26 @@ function loadGrid(attackFunc)
             shipBtn.className = 'unselectedShip';
             shipBtn.addEventListener("mousedown", function(){
                 
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
                     //console.log("d");
-                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this);
+                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     mouseDown = true;
                 }
             });
             shipBtn.addEventListener("mousemove", function(){
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
                     if(mouseDown === true && leftToPlace>0)
                     {
-                        placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this);
-                        
+                        placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     }
                 }
             });
             shipBtn.addEventListener("mouseup", function(){
-                if(selectionPhase === true)
+                if(canSelect === true)
                 {
-                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this);
+                    placeShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, shipArr);
                     
                     mouseDown = false;
                 }
@@ -147,7 +132,7 @@ function resetShipGrid()
     document.querySelectorAll('.selectedShip').forEach(function(el){
         el.className = 'unselectedShip';
     });
-    selectionPhase = true;
+    canSelect = true;
     shipOrientation = 0;
     numShips=numShipsChoice;
     leftToPlace=numShips;
@@ -160,12 +145,12 @@ function resetShipGrid()
     }
 }
 
-function placeShipPiece(row, col, el)
+function placeShipPiece(row, col, el, arr)
 {
-    if(canPlace(row, col) && leftToPlace > 0 )
+    if(canPlace(row, col, arr) && numPieces > 0 )
     {
         el.className = 'selectedShip';
-        shipArr[row][col] = numShips;
+        arr[row][col] = numShips;
         numPieces--;
         if(numPieces == 0)
         {
@@ -178,14 +163,13 @@ function placeShipPiece(row, col, el)
     else if(leftToPlace == 0 && numShips == 0)
     {
         console.log("selection phase over");
-        selectionPhase = false;
-        //check if ready for sending board config to server
+        canSelect = false;
     }
 }
 
-function canPlace(row, col)
+function canPlace(row, col, arr)
 {
-    if(shipArr[row][col] !== 0)
+    if(arr[row][col] !== 0)
     {
         return false;
     }
@@ -195,12 +179,12 @@ function canPlace(row, col)
     }
     else if(leftToPlace === (numShips - 1) )
     {
-        if( (row-1>=0 && shipArr[row-1][col] === numShips) || (row+1 <10 &&shipArr[row+1][col] === numShips))
+        if( (row-1>=0 && arr[row-1][col] === numShips) || (row+1 <10 &&arr[row+1][col] === numShips))
         {
             shipOrientation = 1;
             return true;
         }
-        else if ( (col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips) )
+        else if ( (col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips) )
         {
             shipOrientation = 2;
             return true;
@@ -210,11 +194,11 @@ function canPlace(row, col)
             return false;
         }        
     }
-    else if(shipOrientation === 1 && leftToPlace>0 && ((row-1>=0 && shipArr[row-1][col] === numShips) ||  (row+1 <10 &&shipArr[row+1][col] === numShips)))
+    else if(shipOrientation === 1 && numPieces>0 && ((row-1>=0 && arr[row-1][col] === numShips) ||  (row+1 <10 &&arr[row+1][col] === numShips)))
     {
         return true;
     }
-    else if(shipOrientation === 2 && leftToPlace>0 && ((col-1>=0 && shipArr[row][col-1] === numShips) || (col+1 <10 && shipArr[row][col+1] === numShips)) )
+    else if(shipOrientation === 2 && numPieces>0 && ((col-1>=0 && arr[row][col-1] === numShips) || (col+1 <10 && arr[row][col+1] === numShips)) )
     {
         return true;
     }

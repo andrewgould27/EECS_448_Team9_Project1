@@ -1,4 +1,11 @@
-
+body
+{
+	background-color: #c2b280;
+}
+canvas{
+    display: flex;
+    margin: auto;
+}
 .grid{
     border: 1px solid black;
     display: inline-table;
@@ -9,13 +16,28 @@
     display: flex;
     margin: auto;
 }
+#privacyButton{
+    border-radius: 5px;
+    flex-grow:1;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: white;
+}
 
 .introScreen{
+    color: white;
+    background-color: #00008B;
     border-block-color: teal;
     flex-grow: 1;
     padding-top:10%;
     padding-bottom:10%;
 }
+#chooseNumShips
+{
+   background-color: #76b6c4;
+   color: white;
+}
+
 
 .unselectedShip{
     border-radius: 5px;
@@ -23,14 +45,42 @@
     padding: 20px;
     background-color: white;
 }
-
-.selectedShip{
+.ship_6{
     border-radius: 10px;
     border: 4px double #000000;
     padding: 20px;
-    background-color: green;
+    background-color: Cyan;
 }
-
+.ship_5{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: CadetBlue;
+}
+.ship_4{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: DarkSeaGreen;
+}
+.ship_3{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(81, 211, 81);
+}
+.ship_2{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(68, 57, 231);
+}
+.ship_1{
+    border-radius: 10px;
+    border: 4px double #000000;
+    padding: 20px;
+    background-color: rgb(23, 160, 114);
+}
 .attackedShip{
     border-radius: 10px;
     border: 4px double #000000;
@@ -44,21 +94,18 @@
     padding: 20px;
     background-color: white;
 }
-
 .successfulAttack{
     border-radius: 5px;
     border: 4px double #000000;
     padding: 20px;
     background-color: red;
 }
-
 .pendingAttack{
     border-radius: 5px;
     border: 4px double #000000;
     padding: 20px;
     background-color: pink;
 }
-
 .missedAttack{
     border-radius: 5px;
     border: 4px double #000000;
@@ -79,19 +126,27 @@ table{
 .startButton{
     padding: 10px;
     margin: auto;
-    
 }
-
-#buttons{
+#inGameButtons{
     /* align-items:center; */
     display: flex;
     /* padding: 10px; */
     margin-left:11%;
     margin-right:11%;
 }
+#endMenu{
+	/* align-items:center; */
+	display: flex;
+	/* padding: 10px; */
+	margin-left:11%;
+	margin-right:11%;
+}
+.endButton{
+    padding: 10px;
+    margin: auto;
+}
 
 #boardDiv {
     align-items: center;
     display: flex;
 }
-
