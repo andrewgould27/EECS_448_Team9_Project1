@@ -134,7 +134,7 @@ function loadNextTurn(shipArr, attackArr)
     let switchPlayerButton = document.createElement('button');
 
     notifications.clearRect(0,0, 500, 100);
-    colLabels.clearRect(0,0, 524, 50);
+    colLabels.clearRect(0,0, 1024, 50);
     while(boardDiv.firstChild)//deletes p1's board from screen
     {
         boardDiv.removeChild(boardDiv.lastChild);
