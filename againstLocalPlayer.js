@@ -65,7 +65,7 @@ let p2NumHits = 0;
 let p2NumShips = numShipsChoice;
 let p2NumPieces;
 
-let lastPos = [];	//variable holding the element of previous placed ship
+let lastPos = [];	//variable holding the elements of previous placed ships
 
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
@@ -121,6 +121,7 @@ function localIsReady()//if player 1 is ready for attack phase
     {
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
+	document.querySelector('#undo').disabled = true;
         whosTurn = 2;
         setTimeout(() => {
             while(boardDiv.firstChild)//deletes p1's board from screen
@@ -130,6 +131,7 @@ function localIsReady()//if player 1 is ready for attack phase
             loadSelectionGrid(p2shipArr);//loads ship selection screen
             document.querySelector('#ready').disabled = false;
             document.querySelector('#reset').disabled = false;
+	    document.querySelector('#undo').disabled = false;
             canSelect = true;
         }, 3000);//pauses to allow player switching
 
@@ -139,6 +141,7 @@ function localIsReady()//if player 1 is ready for attack phase
         //p1 and p2 should have already selected ships --> load actual game board configuration
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
+	document.querySelector('#undo').disabled = true;
         whosTurn = 1;
         setTimeout(() => {
             while(boardDiv.firstChild)
@@ -147,6 +150,7 @@ function localIsReady()//if player 1 is ready for attack phase
             }
             document.querySelector('#ready').hidden = true;
             document.querySelector('#reset').hidden = true;
+	    document.querySelector('#undo').hidden = true;
             canSelect = true;
             loadPlayGrid(p1shipArr, p1attackArr);
         }, 3000);
