@@ -67,7 +67,18 @@ let p2NumPieces;
 
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
+notifications.font = '30px Arial';
 notifications.textAlign = 'center';
+
+let rowLabelsCanvas = document.createElement('canvas');
+let rowLabels = rowLabelsCanvas.getContext('2d');
+rowLabels.font = '50px Arial';
+rowLabels.textAlign = 'center';
+
+let colLabelsCanvas = document.createElement('canvas');
+let colLabels = colLabelsCanvas.getContext('2d');
+colLabels.font = '50px Arial';
+colLabels.textAlign = 'center';
 
 let gameNumber = 1;
 
@@ -123,6 +134,7 @@ function loadNextTurn(shipArr, attackArr)
     let switchPlayerButton = document.createElement('button');
 
     notifications.clearRect(0,0, 500, 100);
+    colLabels.clearRect(0,0, 524, 50);
     while(boardDiv.firstChild)//deletes p1's board from screen
     {
         boardDiv.removeChild(boardDiv.lastChild);
@@ -300,12 +312,31 @@ function attackLocal(row, col, attackArr, button)
  */
 function loadPlayGrid(shipArr, attackArr)
 {
+    rowLabelsCanvas.width = 50;
+    rowLabelsCanvas.height = 524;
+    colLabelsCanvas.width = 1046.4;
+    colLabelsCanvas.height = 50;
+    document.querySelector('#board').appendChild(rowLabelsCanvas);
+    document.querySelector('#colLabels').appendChild(colLabelsCanvas);
+
     if(whosTurn === 1)
     {
         notifications.clearRect(0,0,500,100);
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Red';
         notifications.fillText('Choose your attack position (P1)', 250, 75);
+
+        rowLabels.fillStyle = 'Red';
+        colLabels.fillStyle = 'Red';
+        for(let i=0; i<10; i++)
+        {
+            rowLabels.fillText((i+1).toString(),25,(i*51)+26);
+            colLabels.fillText(String.fromCharCode(i+97),(i*52)+50, 25);
+        }
+        for(let i=10; i<20; i++)
+        {
+            colLabels.fillText(String.fromCharCode(i+87),(i*52)+50, 25);
+        }
     }
     else
     {
@@ -313,6 +344,18 @@ function loadPlayGrid(shipArr, attackArr)
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Blue';
         notifications.fillText('Choose your attack position (P2)', 250, 75);
+
+        rowLabels.fillStyle = 'Blue';
+        colLabels.fillStyle = 'Blue';
+        for(let i=0; i<10; i++)
+        {
+            rowLabels.fillText((i+1).toString(),25,(i*51)+26);
+            colLabels.fillText(String.fromCharCode(i+97),(i*52)+50, 25);
+        }
+        for(let i=10; i<20; i++)
+        {
+            colLabels.fillText(String.fromCharCode(i+87),(i*52)+50, 25);
+        }
     }
     var gameBoard = document.querySelector('#board');
     var shipBoard = document.createElement('table');
@@ -398,19 +441,40 @@ function loadPlayGrid(shipArr, attackArr)
  */
 function loadSelectionGrid(playerShipArray)
 {
+    rowLabelsCanvas.width = 50;
+    rowLabelsCanvas.height = 524;
+    colLabelsCanvas.width = 524;
+    colLabelsCanvas.height = 50;
+    document.querySelector('#board').appendChild(rowLabelsCanvas);
+    document.querySelector('#colLabels').appendChild(colLabelsCanvas);
+
     if(whosTurn === 1)
     {
         notifications.clearRect(0,0,500,100);
-        notifications.font = '30px Arial';
         notifications.fillStyle = 'Red';
         notifications.fillText('Choose Your Ship Positions Player1', 250, 75);
+        
+        rowLabels.fillStyle = 'Red';
+        colLabels.fillStyle = 'Red';
+        for(let i=0; i<10; i++)
+        {
+            rowLabels.fillText((i+1).toString(),25,(i*51)+26);
+            colLabels.fillText(String.fromCharCode(i+97),(i*52)+50, 25);
+        }
     }
     else
     {
         notifications.clearRect(0,0,500,100);
-        notifications.font = '30px Arial';
         notifications.fillStyle = 'Blue';
         notifications.fillText('Choose Your Ship Positions Player2', 250, 75);
+
+        rowLabels.fillStyle = 'Blue';
+        colLabels.fillStyle = 'Blue';
+        for(let i=0; i<10; i++)
+        {
+            rowLabels.fillText((i+1).toString(),25,(i*51)+26);
+            colLabels.fillText(String.fromCharCode(i+97),(i*52)+50, 25);
+        }
     }
 
     var gameBoard = document.querySelector('#board');

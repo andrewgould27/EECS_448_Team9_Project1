@@ -10,16 +10,11 @@ function main(gameType)
     }
     else if(gameType.id === 'botGame')
     {
-        const localGameScript = document.createElement('script');
-        localGameScript.type = 'text/javascript';
-        localGameScript.src = 'againstBot.js';
+        const botGameScript = document.createElement('script');
+        botGameScript.type = 'text/javascript';
+        botGameScript.src = 'againstBot.js';
 
-        const gameCache = document.createElement('script');
-        gameCache.type = 'text/javascript';
-        gameCache.src = 'gameCache.js';
-
-        document.querySelector('head').appendChild(gameCache);
-        document.querySelector('head').appendChild(gameCache);
+        document.querySelector('head').appendChild(botGameScript);
     }
     
 }
