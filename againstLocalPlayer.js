@@ -85,7 +85,8 @@ let gameNumber = 1;
 onLoad();
 
 /**
- * Configures variables and removes configuration buttons. Loads the ship selection screen
+ * Configures variables for game counters and win conditions and removes configuration buttons. 
+ * Loads the ship selection screen
  * for Player 1.
  */
 function onLoad() //called as soon as script is loaded
@@ -97,25 +98,25 @@ function onLoad() //called as soon as script is loaded
     if(numShipsChoice===0)
     {
         numShipsChoice = parseInt(document.querySelector('#chooseNumShips').value);
+        for(let i=numShipsChoice; i>0; i--)
+        {
+            hitsToWin += i;
+        }
     }
     while(configButtons.firstChild)//deletes p1's board from screen
     {
         configButtons.removeChild(configButtons.lastChild);
     }
     
-
-    for(let i=numShipsChoice; i>0; i--)
-    {
-        hitsToWin += i;
-    }
-
     document.querySelectorAll('.startButton').forEach(
         function(el){el.hidden = false;} );
 
     p1NumShips = numShipsChoice;
     p1NumPieces = p1NumShips;
+    p1NumHits = 0;
     p2NumShips = numShipsChoice;
     p2NumPieces = p2NumShips;
+    p2NumHits = 0;
 
     loadSelectionGrid(p1shipArr);
     document.querySelector('#ready').onclick = localIsReady;
