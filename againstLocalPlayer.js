@@ -224,6 +224,7 @@ function attackLocal(row, col, attackArr, button)
     {
         if(p2shipArr[row][col] !== 0 )
         {
+            let whichShip = p2shipArr[row][col];
             p1NumHits++;
             attackArr[row][col] = 1;
             p2shipArr[row][col] = -1;
@@ -239,10 +240,30 @@ function attackLocal(row, col, attackArr, button)
             }
             else
             {
+                let message;
+                let shipSunk = true;
+                for(let i=0; i<10; i++)
+                {
+                    for(let j=0; j<10; j++)
+                    {
+                        if(p2shipArr[i][j] === whichShip)
+                        {
+                            shipSunk = false;
+                        }
+                    }
+                }
+                if(shipSunk === true)
+                {
+                    message = 'Ship Sunk: '+ 1 + 'x' + whichShip + '!';
+                }
+                else
+                {
+                    message = 'Hit!';
+                }
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
-                notifications.fillText('Hit!', 250, 75);
+                notifications.fillText(message, 250, 75);
                 window.setTimeout(()=>{
                     loadNextTurn(p2shipArr, p2attackArr);
                 }, 1000);
@@ -265,6 +286,7 @@ function attackLocal(row, col, attackArr, button)
     {
         if(p1shipArr[row][col] !== 0 )
         {
+            let whichShip = p1shipArr[row][col];
             p2NumHits++;
             attackArr[row][col] = 1;
             p1shipArr[row][col] = -1;
@@ -280,10 +302,30 @@ function attackLocal(row, col, attackArr, button)
             }
             else
             {
+                let message;
+                let shipSunk = true;
+                for(let i=0; i<10; i++)
+                {
+                    for(let j=0; j<10; j++)
+                    {
+                        if(p1shipArr[i][j] === whichShip)
+                        {
+                            shipSunk = false;
+                        }
+                    }
+                }
+                if(shipSunk === true)
+                {
+                    message = 'Ship Sunk: '+ 1 + 'x' + whichShip + '!';
+                }
+                else
+                {
+                    message = 'Hit!';
+                }
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
-                notifications.fillText('Hit!', 250, 75);
+                notifications.fillText(message, 250, 75);
                 window.setTimeout(()=>{
                     loadNextTurn(p1shipArr, p1attackArr);
                 }, 1000);
