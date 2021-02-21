@@ -660,6 +660,7 @@ function p2PlaceShipPiece(row, col, el, arr)
  * @param {Object} arr the array being checked
  * @param {Object} numPieces the number of pieces remaining of the current ship to be placed
  * @param {Object} numShips the number of ships remaining to be placed
+ * @returns {boolean} whether the ship piece can be placed
  */
 function canPlace(row, col, arr, numPieces, numShips)
 {
