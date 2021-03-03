@@ -446,6 +446,11 @@ function loadPlayGrid(shipArr, attackArr)
         }
 
         row = attackBoard.insertRow(i);
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+          }
+
         for(let k=0; k<10; k++)
         {
             var atkBtn = document.createElement('button');
@@ -460,6 +465,7 @@ function loadPlayGrid(shipArr, attackArr)
                     atkBtn.className = 'missedAttack';
                     break;
             }
+            if(whosTurn===1){
             atkBtn.addEventListener("click", function(){
                 let row = this.parentNode.parentNode.rowIndex;
                 let col = this.parentNode.cellIndex;
@@ -470,6 +476,16 @@ function loadPlayGrid(shipArr, attackArr)
 
                 }
             });
+        }
+            else{
+                let row=getRandomInt(10)
+                let col=getRandomInt(10)
+                if(attackArr[row][col] === 0 && canSelect === true)
+                {
+                    canSelect = false;
+                    attackLocal(row, col, attackArr, this);
+                }
+            }
 
             cell = row.insertCell(k);
             cell.appendChild(atkBtn);
