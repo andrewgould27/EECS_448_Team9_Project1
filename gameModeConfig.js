@@ -14,6 +14,8 @@ function main(gameType)
 {
     if(gameType.id == 'local')
     {
+        console.log('bot')
+
         const localGameScript = document.createElement('script');
         localGameScript.type = 'text/javascript';
         localGameScript.src = 'againstLocalPlayer.js';
