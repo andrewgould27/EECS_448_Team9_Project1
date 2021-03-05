@@ -564,7 +564,7 @@ function loadSelectionGrid(playerShipArray)
                 {
                     if(whosTurn === 1)
                     {
-			console.log(playerShipArray);
+			//console.log(playerShipArray);
                         p1PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     /*
@@ -582,9 +582,14 @@ function loadSelectionGrid(playerShipArray)
             });
                     if(whosTurn===2)
                     {
-                        console.log(playerShipArray);
+                        //console.log(playerShipArray);
                         //p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
-                        p2PlaceShipPiece(getRandomInt(10), getRandomInt(10), this, playerShipArray);
+                        do
+                        {
+                        row_placement=getRandomInt(10)
+                        col_placement=getRandomInt(10)
+                        p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray);
+                        }while(p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray)!=true)
                     }
 
 
@@ -601,7 +606,7 @@ function loadSelectionGrid(playerShipArray)
                         }
                         else if(whosTurn === 2)
                         {
-                            p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                            //p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                         }
                     }
                 }
@@ -615,7 +620,7 @@ function loadSelectionGrid(playerShipArray)
                     }
                     else
                     {
-                        p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
+                        //p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                     }
                     mouseDown = false;
                 }
@@ -660,8 +665,10 @@ function p1PlaceShipPiece(row, col, el, arr)
                 el.className = 'ship_6';
                 break;
         }
+        if(p1NumPieces!==0){
         arr[row][col] = p1NumShips;
         p1NumPieces--;
+        }
         if(p1NumPieces === 0)
         {
             p1NumShips--;
@@ -688,6 +695,7 @@ function p1PlaceShipPiece(row, col, el, arr)
  */
 function p2PlaceShipPiece(row, col, el, arr)
 {
+    //console.log(col, ' ',row,' cant')            
     if(canPlace(row, col, arr, p2NumPieces, p2NumShips) && p2NumPieces > 0 )
     {
         /*
@@ -713,21 +721,25 @@ function p2PlaceShipPiece(row, col, el, arr)
                 break;
         }
         */
-        arr[row][col] = p2NumShips;
-        p2NumPieces--;
+        if(p2NumPieces!==0){
+            arr[row][col] = p2NumShips;
+            p2NumPieces--;
+            console.log(col, ' ',row, 'can place!!!!!!!!!!!!!!')            
+        }
         if(p2NumPieces === 0)
         {
             p2NumShips--;
             p2NumPieces = p2NumShips;
             shipOrientation = 0;
-            console.log("ship selection over");
+            //console.log("ship selection over");
             document.getElementById("ready").click();
         }
     }
     else if(p2NumPieces === 0 && p2NumShips === 0)
     {
-        console.log("selection phase over");
+        //console.log("selection phase over");
         canSelect = false;
+        return true
     }
 }
 
