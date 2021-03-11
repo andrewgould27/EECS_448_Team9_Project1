@@ -953,11 +953,10 @@ function aiAttack(difficulty)
     {
         // Easy Tier:
         // Randomly pick x, y coords to attack
-        attackCoords.x = getRandomInt(10);
-        attackCoords.y = getRandomInt(10);
-
-        if (p1shipArr[attackCoords.x][attackCoords.y] != 1) // If the spot is already occupied, run it again
-            attackCoords = aiAttack(difficulty);
+        do {
+            attackCoords.x = getRandomInt(10);
+            attackCoords.y = getRandomInt(10);
+        } while (p1shipArr[attackCoords.x][attackCoords.y] < 0)
 
         // Return the coordinates object to be handled in situ
 
