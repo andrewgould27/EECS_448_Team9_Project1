@@ -586,10 +586,10 @@ function loadSelectionGrid(playerShipArray)
                         //p2PlaceShipPiece(this.parentNode.parentNode.rowIndex, this.parentNode.cellIndex, this, playerShipArray);
                         do
                         {
-                        row_placement=getRandomInt(10)
-                        col_placement=getRandomInt(10)
-                        p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray);
-                        }while(p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray)!=true)
+                            row_placement=getRandomInt(10);
+                            col_placement=getRandomInt(10);
+                            p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray);
+                        } while(p2PlaceShipPiece(row_placement, col_placement, this, playerShipArray)!=true)
                     }
 
 
@@ -862,4 +862,94 @@ function playAgain()
         }
     }
     onLoad();
+}
+
+/**
+ * Function for AI to pick a cell to attack based on difficulty
+ * @param {string} difficulty String of the difficulty to pick which algorithm to use to determine an attack
+ * @returns {Object} An ordered pair with x and y attributes to allow easy switching between algorithms
+ */
+
+function aiAttack(difficulty)
+{
+    // Initialize object to return the coords to shoot at
+    let attackCoords = {
+        x : 0,
+        y : 0,
+    };
+
+    if (difficulty === "easy")
+    {
+        // Easy Tier:
+        // Randomly pick x, y coords to attack
+        attackCoords.x = getRandomInt(10);
+        attackCoords.y = getRandomInt(10);
+
+        if (p1shipArr[attackCoords.x][attackCoords.y] != 1) // If the spot is already occupied, run it again
+            attackCoords = aiAttack(difficulty);
+
+        // Return the coordinates object to be handled in situ
+        return attackCoords;
+
+    }
+    else if (difficulty === "medium")
+    {
+        // Medium Tier:
+        // Randomly pick x, y coords until hit then hit orthogonally (up, down, left, right)
+        
+        let hitCoords = {
+            x : 0,
+            y : 0,
+        };
+
+        // Find a hit piece
+        let foundHit = false;
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                if (p2attackArr[i][j] === 1) {
+                    foundHit === true;
+                    hitCoords.x = i;
+                    hitCoords.y = j;
+                }
+            }
+        }
+
+        // Pick a cell orthongally
+        cellLeft  = { x : hitCoords.x - 1, y : hitCoords.y };   // Cell to the left of the hit
+        cellRight = { x : hitCoords.x + 1, y : hitCoords.y };   // Cell to the right of the hit
+        cellUp    = { x : hitCoords.x, y : hitCoords.y - 1 };   // Cell above the hit
+        cellDown  = { x : hitCoords.x, y : hitCoords.y + 1 };   // Cell below the hit
+
+        // Aggregate possible cells into an array
+        let possibleCells = { cellLeft, cellRight, cellUp, cellDown };
+        
+        // Pick a random index
+        let idx = getRandomInt(possibleCells.length() - 1);
+
+        // Set attack coords from the randomly picked cell
+        attackCoords.x = possibleCells[idx].x;
+        attackCoords.y = possibleCells[idx].y;
+
+        // If the coordinates are out of bounds, run it again
+        if (attackCoords.x > 9 || attackCoords.x < 0 || attackCoords.y > 9 || attackCoords.x < 0)
+            attackCoords = aiAttack(difficulty);
+
+        return attackCoords;
+
+    }
+    else 
+    {
+        // Hard Tier:
+        // Hit a square every time
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (p1shipArr === 1) {
+                    attackCoords.x = i;
+                    attackCoords.y = j;
+                }
+            }
+        }
+
+        return attackCoords;
+    }
 }
