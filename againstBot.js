@@ -298,6 +298,7 @@ function attackLocal(row, col, attackArr, button)
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
                 notifications.fillText(message, 250, 75);
+            
                
             }
         }
@@ -361,6 +362,7 @@ function attackLocal(row, col, attackArr, button)
                     game_music=new playSound('sunk.mp3')
                     game_music.play()
                     message = 'Ship Sunk: '+ 1 + 'x' + whichShip + '!';
+                    canSelect = true;
                 }
                 else
                 {
@@ -368,6 +370,7 @@ function attackLocal(row, col, attackArr, button)
                     game_music=new playSound('hit_c.mp3')
                     game_music.play()
                     message = 'Hit!';
+                    canSelect = true;
                 }
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
