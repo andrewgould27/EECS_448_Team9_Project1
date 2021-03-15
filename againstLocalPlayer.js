@@ -620,6 +620,7 @@ function loadSelectionGrid(playerShipArray)
                     mouseDown = true;
                 }
             });
+            /*
             shipBtn.addEventListener("mousemove", function(){
                 if(canSelect === true)
                 {
@@ -636,6 +637,7 @@ function loadSelectionGrid(playerShipArray)
                     }
                 }
             });
+            
             shipBtn.addEventListener("mouseup", function(){
                 if(canSelect === true)
                 {
@@ -650,6 +652,7 @@ function loadSelectionGrid(playerShipArray)
                     mouseDown = false;
                 }
             });
+            */
             var cell = row.insertCell(j);
             cell.appendChild(shipBtn);
         }
@@ -775,6 +778,13 @@ function p2PlaceShipPiece(row, col, el, arr)
  */
 function canPlace(row, col, arr, numPieces, numShips)
 {
+    console.log("Can I place a piece at (" + row + ", " + col + ")");
+
+    console.log("Value arr[row][col] = " + arr[row][col]);
+    console.log("numShips: " + numShips);
+    console.log("numPieces: " + numPieces);
+    console.log("col + numPieces: " + col + "+" + numPieces + "=" + (col+numPieces));
+    console.log("row + numPieces: " + row + "+" + numPieces + "=" + (row+numPieces));
     if(arr[row][col] !== 0)
     {
         return false;
@@ -808,7 +818,6 @@ function canPlace(row, col, arr, numPieces, numShips)
             return false;
         }
     }
-    
     //
 
     else if(numPieces === (numShips - 1) )
@@ -825,7 +834,7 @@ function canPlace(row, col, arr, numPieces, numShips)
         }
         else
         {
-           return false;
+            return false;
         }
     }
 

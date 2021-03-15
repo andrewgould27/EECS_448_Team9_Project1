@@ -536,9 +536,7 @@ function loadPlayGrid(shipArr, attackArr)
             });
         }
             else{
-                let coords = aiAttack("easy");
-                console.log(p1shipArr);
-                console.log(coords);
+                let coords = aiAttack("medium");
                 let row=coords.x;
                 let col=coords.y;
                 if(attackArr[row][col] === 0 && canSelect === true)
@@ -953,11 +951,10 @@ function aiAttack(difficulty)
     {
         // Easy Tier:
         // Randomly pick x, y coords to attack
-        attackCoords.x = getRandomInt(10);
-        attackCoords.y = getRandomInt(10);
-
-        if (p1shipArr[attackCoords.x][attackCoords.y] != 1) // If the spot is already occupied, run it again
-            attackCoords = aiAttack(difficulty);
+        do {
+            attackCoords.x = getRandomInt(10);
+            attackCoords.y = getRandomInt(10);
+        } while(p2attackArr[attackCoords.x][attackCoords.y] < 0);
 
         // Return the coordinates object to be handled in situ
 
@@ -970,43 +967,62 @@ function aiAttack(difficulty)
     {
         // Medium Tier:
         // Randomly pick x, y coords until hit then hit orthogonally (up, down, left, right)
-        
-        let hitCoords = {
-            x : 0,
-            y : 0,
-        };
+        console.log(p2attackArr);
 
-        // Find a hit piece
-        let foundHit = false;
+        // Are there any hit pieces?
+        console.log("Checking for any hit pieces...");
+        let hitCells = [];
+        let anyHit = false;
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
-                if (p2attackArr[i][j] === 1) {
-                    foundHit === true;
-                    hitCoords.x = i;
-                    hitCoords.y = j;
+                if (p2attackArr[i][j] > 0) {
+                    anyHit = true;
+                    let hitCell = { x: i, y: j };
+                    hitCells.push(hitCell);
                 }
             }
         }
 
-        // Pick a cell orthongally
-        cellLeft  = { x : hitCoords.x - 1, y : hitCoords.y };   // Cell to the left of the hit
-        cellRight = { x : hitCoords.x + 1, y : hitCoords.y };   // Cell to the right of the hit
-        cellUp    = { x : hitCoords.x, y : hitCoords.y - 1 };   // Cell above the hit
-        cellDown  = { x : hitCoords.x, y : hitCoords.y + 1 };   // Cell below the hit
+        console.log(anyHit);
+        console.log(hitCells);
 
-        // Aggregate possible cells into an array
-        let possibleCells = { cellLeft, cellRight, cellUp, cellDown };
-        
-        // Pick a random index
-        let idx = getRandomInt(possibleCells.length() - 1);
+        if (anyHit)
+        {
+            // Found some hit pieces, check if there are orthogonal cells to attack
+            for (let i = 0; i < hitCells.length; i++) {
+                console.log("(%d, %d) has been hit.", hitCells[i].x, hitCells[i].y);
+                cX = hitCells[i].x; cY = hitCells[i].y;
 
-        // Set attack coords from the randomly picked cell
-        attackCoords.x = possibleCells[idx].x;
-        attackCoords.y = possibleCells[idx].y;
+                // Left:    (x - 1, y)
+                // Right:   (x + 1, y)
+                // Up:      (x, y - 1)
+                // Down:    (x, y + 1)
+                let leftCell = { x: (cX - 1), y: cY };
+                let rightCell = { x: (cX + 1), y: cY };
+                let upCell = { x: cX, y: (cY - 1) };
+                let downCell = { x: cX, y: (cY + 1) };
 
-        // If the coordinates are out of bounds, run it again
-        if (attackCoords.x > 9 || attackCoords.x < 0 || attackCoords.y > 9 || attackCoords.x < 0)
-            attackCoords = aiAttack(difficulty);
+                let possibleCells = [leftCell, rightCell, upCell, downCell];
+
+                for (let idx = 0; idx < possibleCells.length; idx++) {
+                    let x = possibleCells[idx].x;
+                    let y = possibleCells[idx].y;
+                    if (p2attackArr[x][y] === 0) {
+                        attackCoords.x = possibleCells[idx].x;
+                        attackCoords.y = possibleCells[idx].y;
+
+                        console.log(attackCoords);
+
+                        return attackCoords;
+                    }
+                }
+            }
+        }
+        console.log("No hits found, shoot randomly.");
+        do {
+            attackCoords.x = getRandomInt(10);
+            attackCoords.y = getRandomInt(10);
+        } while(p2attackArr[attackCoords.x][attackCoords.y] < 0);
 
         console.log(attackCoords);
 
@@ -1015,6 +1031,7 @@ function aiAttack(difficulty)
     }
     else 
     {
+        console.log(p2attackArr);
         // Hard Tier:
         // Hit a square every time
         for (let i = 0; i < 9; i++) {
