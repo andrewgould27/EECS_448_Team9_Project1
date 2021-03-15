@@ -300,9 +300,7 @@ function attackLocal(row, col, attackArr, button)
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
                 notifications.fillText(message, 250, 75);
-                window.setTimeout(()=>{
-                    loadNextTurn(p2shipArr, p2attackArr);
-                }, 1000);
+                
             }
         }
         else
@@ -377,9 +375,7 @@ function attackLocal(row, col, attackArr, button)
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
                 notifications.fillText(message, 250, 75);
-                window.setTimeout(()=>{
-                    loadNextTurn(p1shipArr, p1attackArr);
-                }, 1000);
+                
             }
         }
         else
@@ -525,7 +521,7 @@ function loadPlayGrid(shipArr, attackArr)
                 let col = this.parentNode.cellIndex;
                 if(attackArr[row][col] === 0 && canSelect === true)
                 {
-                    canSelect = false;
+                    //canSelect = false;
                     attackLocal(row, col, attackArr, this);
 
                 }

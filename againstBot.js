@@ -103,6 +103,7 @@ function playSound(src){
 }
 
 onLoad();
+
 /**
  * Configures variables for game counters and win conditions and removes configuration buttons. 
  * Loads the ship selection screen
@@ -165,7 +166,7 @@ function loadNextTurn(shipArr, attackArr)
     {
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Blue';
-        notifications.fillText('Computer\'s Turn', 250, 75);
+        notifications.fillText('P2\'s Turn', 250, 75);
     }
     else
     {
@@ -202,9 +203,6 @@ function localIsReady()//if player 1 is ready for attack phase
 {
     if(p1NumShips === 0 && whosTurn === 1)
     {
-        ////
-        game_music=new playSound('scifi.mp3')
-        game_music.play()
         document.querySelector('#ready').disabled = true;
         document.querySelector('#reset').disabled = true;
         document.querySelector('#ready').hidden = true;
@@ -217,8 +215,6 @@ function localIsReady()//if player 1 is ready for attack phase
     else if(p2NumShips === 0 && whosTurn === 2)//if player 2 is ready for attack phase
     {
         //p1 and p2 should have already selected ships --> load actual game board configuration
-        //game_music=new playSound('scifi.mp3')
-        //game_music.play()
         document.querySelector('#ready').hidden = true;
         document.querySelector('#reset').hidden = true;
         setTimeout(() => {
@@ -253,15 +249,8 @@ function attackLocal(row, col, attackArr, button)
             attackArr[row][col] = 1;
             p2shipArr[row][col] = -1;
             button.className = 'successfulAttack';
-            ////
-            game_music=new playSound('hit_c.mp3')
-            game_music.play()
-
             if(p1NumHits === hitsToWin)
             {
-                ////
-                game_music=new playSound('win.mp3')
-                game_music.play()
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Red';
@@ -285,16 +274,10 @@ function attackLocal(row, col, attackArr, button)
                 }
                 if(shipSunk === true)
                 {
-                    ////Sunk effect
-                    game_music=new playSound('sunk.mp3')
-                    game_music.play()
                     message = 'Ship Sunk: '+ 1 + 'x' + whichShip + '!';
                 }
                 else
                 {
-                    ////Hit effect
-                    game_music=new playSound('hit_c.mp3')
-                    game_music.play()
                     message = 'Hit!';
                 }
                 notifications.clearRect(0,0,500,100);
@@ -308,9 +291,6 @@ function attackLocal(row, col, attackArr, button)
         }
         else
         {
-            ////
-            game_music=new playSound('missed.mp3')
-            game_music.play()
             attackArr[row][col] = -1;
             button.className = 'missedAttack';
             notifications.clearRect(0,0,500,100);
@@ -331,18 +311,12 @@ function attackLocal(row, col, attackArr, button)
             attackArr[row][col] = 1;
             p1shipArr[row][col] = -1;
             button.className = 'successfulAttack';
-            ////
-            game_music=new playSound('hit_c.mp3')
-            game_music.play()
             if(p2NumHits === hitsToWin)
             {
-                ////
-                game_music=new playSound('fart.mp3')
-                game_music.play()
                 notifications.clearRect(0,0,500,100);
                 notifications.font = '30px Arial';
                 notifications.fillStyle = 'Blue';
-                notifications.fillText('Computer WIN!', 250, 75);
+                notifications.fillText('P2 YOU WIN!', 250, 75);
                 document.querySelectorAll('.endButton').forEach(
                     function(el){el.hidden = false;} );
             }
@@ -362,16 +336,10 @@ function attackLocal(row, col, attackArr, button)
                 }
                 if(shipSunk === true)
                 {
-                    ////Sunk effect
-                    game_music=new playSound('sunk.mp3')
-                    game_music.play()
                     message = 'Ship Sunk: '+ 1 + 'x' + whichShip + '!';
                 }
                 else
                 {
-                    ////hit effect
-                    game_music=new playSound('hit_c.mp3')
-                    game_music.play()
                     message = 'Hit!';
                 }
                 notifications.clearRect(0,0,500,100);
@@ -385,9 +353,6 @@ function attackLocal(row, col, attackArr, button)
         }
         else
         {
-            ////miss music
-            game_music=new playSound('missed.mp3')
-            game_music.play()
             attackArr[row][col] = -1;
             button.className = 'missedAttack';
             notifications.clearRect(0,0,500,100);
@@ -419,9 +384,6 @@ function loadPlayGrid(shipArr, attackArr)
 
     if(whosTurn === 1)
     {
-        ////change term music
-        game_music=new playSound('scifi.mp3')
-        game_music.play()
         notifications.clearRect(0,0,500,100);
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Red';
@@ -441,13 +403,10 @@ function loadPlayGrid(shipArr, attackArr)
     }
     else
     {
-        ////change term
-        //game_music=new playSound('scifi.mp3')
-        //game_music.play()
         notifications.clearRect(0,0,500,100);
         notifications.font = '30px Arial';
         notifications.fillStyle = 'Blue';
-        notifications.fillText('Choose your attack position (Computer)', 250, 75);
+        notifications.fillText('Choose your attack position (P2)', 250, 75);
 
         rowLabels.fillStyle = 'Blue';
         colLabels.fillStyle = 'Blue';
@@ -510,7 +469,7 @@ function loadPlayGrid(shipArr, attackArr)
 
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
-        }
+          }
 
         for(let k=0; k<10; k++)
         {
@@ -571,9 +530,6 @@ function loadSelectionGrid(playerShipArray)
 
     if(whosTurn === 1)
     {
-        ////choose position music
-        game_music=new playSound('among.mp3')
-        game_music.play()
         notifications.clearRect(0,0,500,100);
         notifications.fillStyle = 'Red';
         notifications.fillText('Choose Your Ship Positions Player1', 250, 75);
@@ -590,7 +546,7 @@ function loadSelectionGrid(playerShipArray)
     {
         notifications.clearRect(0,0,500,100);
         notifications.fillStyle = 'Blue';
-        notifications.fillText('Choose Your Ship Positions Computer', 250, 75);
+        notifications.fillText('Choose Your Ship Positions Player2', 250, 75);
 
         rowLabels.fillStyle = 'Blue';
         colLabels.fillStyle = 'Blue';
@@ -736,7 +692,6 @@ function p1PlaceShipPiece(row, col, el, arr)
         }
         if(p1NumPieces === 0)
         {
-            ////finished selection
             p1NumShips--;
             p1NumPieces = p1NumShips;
             shipOrientation = 0;
@@ -867,9 +822,6 @@ function canPlace(row, col, arr, numPieces, numShips)
  */
 function resetShipGrid()
 {
-    ////clean chessboard mp3
-    game_music=new playSound('empty.mp3')
-    game_music.play()
     console.log('reset button selected');
     document.querySelectorAll('.ship_6, .ship_5, .ship_4, .ship_3, .ship_2, .ship_1').forEach(function(el){
         el.className = 'unselectedShip';
@@ -878,17 +830,11 @@ function resetShipGrid()
     shipOrientation = 0;
     if(whosTurn === 1)
     {
-        ////
-        game_music=new playSound('scifi.mp3')
-        game_music.play()
         p1NumShips=numShipsChoice;
         p1NumPieces=p1NumShips;
     }
     if(whosTurn === 2)
     {
-        ////
-        game_music=new playSound('scifi.mp3')
-        game_music.play()
         p2NumShips=numShipsChoice;
         p2NumPieces=p2NumShips;
     }
@@ -918,9 +864,6 @@ function resetShipGrid()
  */
 function playAgain()
 {
-    ////play again.mp3
-    game_music=new playSound('empty.mp3')
-    game_music.play()
     document.querySelectorAll('.endButton').forEach(
         (el) => {el.hidden = true;} );
     let boardDiv = document.querySelector('#board');
@@ -1050,6 +993,31 @@ function aiAttack(difficulty)
 
         return attackCoords;
     }
+}
+/**
+ * Resets all variables
+ */
+function playAgain()
+{
+    document.querySelectorAll('.endButton').forEach(
+        (el) => {el.hidden = true;} );
+    let boardDiv = document.querySelector('#board');
+    notifications.clearRect(0,0, 500, 100);
+    while(boardDiv.firstChild)//deletes p1's board from screen
+    {
+        boardDiv.removeChild(boardDiv.lastChild);
+    }
+    for( let i = 0 ; i<10; i++)
+    {
+        for (let j =0; j<10; j++)
+        {
+            p1attackArr[i][j] = 0;
+            p1shipArr[i][j] = 0;
+            p2attackArr[i][j] = 0;
+            p2shipArr[i][j] = 0;
+        }
+    }
+    onLoad();
 }
 
 function getRandomInt(max) {
