@@ -65,6 +65,9 @@ let p2NumHits = 0;
 let p2NumShips = numShipsChoice;
 let p2NumPieces;
 
+let difficulty = document.getElementById("chooseDifficulty").value;
+console.log("Difficulty set to %s", difficulty);
+
 let canvas = document.querySelector('#notifications').querySelector('canvas');
 let notifications= canvas.getContext('2d');
 notifications.font = '30px Arial';
@@ -536,7 +539,7 @@ function loadPlayGrid(shipArr, attackArr)
             });
         }
             else{
-                let coords = aiAttack("medium");
+                let coords = aiAttack(difficulty);
                 let row=coords.x;
                 let col=coords.y;
                 if(attackArr[row][col] === 0 && canSelect === true)
