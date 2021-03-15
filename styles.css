@@ -37,7 +37,11 @@ canvas{
    background-color: #76b6c4;
    color: white;
 }
-
+#chooseDifficulty
+{
+    background-color: #76b6c4;
+    color: white;
+}
 
 .unselectedShip{
     border-radius: 5px;
